@@ -12,6 +12,8 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var nameLabel: UILabel!
     @IBOutlet private weak var descriptionLabel: UILabel!
     
+    
+    
     var name: String? {
         get {
             nameLabel.text

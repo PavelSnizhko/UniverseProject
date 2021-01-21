@@ -8,6 +8,7 @@
 import UIKit
 
 class CollectionViewController: UICollectionViewController {
+
     
     var data = [("Pasha", "1234567"), ("Dasha", "534534"), ("Sasha", "142343267")]
     let cellId = String(describing: CollectionViewCell.self)
