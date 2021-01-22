@@ -23,6 +23,8 @@
 		AEC5378A25B9DDCA00BDE7A0 /* ModelGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5378925B9DDCA00BDE7A0 /* ModelGenerator.swift */; };
 		AEC5379225B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5379125B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift */; };
 		AEC5379825BAF42A00BDE7A0 /* GalaxyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5379725BAF42800BDE7A0 /* GalaxyCollectionViewController.swift */; };
+		AEC537C825BB66BB00BDE7A0 /* StarCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC537C725BB66BA00BDE7A0 /* StarCollectionViewController.swift */; };
+		AEC537CB25BB66CD00BDE7A0 /* PlanetCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC537CA25BB66CC00BDE7A0 /* PlanetCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		AEC5378925B9DDCA00BDE7A0 /* ModelGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelGenerator.swift; sourceTree = "<group>"; };
 		AEC5379125B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateViaDelegateProtocol.swift; sourceTree = "<group>"; };
 		AEC5379725BAF42800BDE7A0 /* GalaxyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GalaxyCollectionViewController.swift; path = UniverseProject/Views/GalaxyCollectionViewController.swift; sourceTree = SOURCE_ROOT; };
+		AEC537C725BB66BA00BDE7A0 /* StarCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StarCollectionViewController.swift; path = UniverseProject/Controllers/StarCollectionViewController.swift; sourceTree = SOURCE_ROOT; };
+		AEC537CA25BB66CC00BDE7A0 /* PlanetCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlanetCollectionViewController.swift; path = UniverseProject/Controllers/PlanetCollectionViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +117,8 @@
 		AEC5378E25B9DE3E00BDE7A0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				AEC537CA25BB66CC00BDE7A0 /* PlanetCollectionViewController.swift */,
+				AEC537C725BB66BA00BDE7A0 /* StarCollectionViewController.swift */,
 				AEC5379725BAF42800BDE7A0 /* GalaxyCollectionViewController.swift */,
 				AEC5375C25B96AA800BDE7A0 /* CollectionViewController.swift */,
 			);
@@ -200,6 +206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AEC537CB25BB66CD00BDE7A0 /* PlanetCollectionViewController.swift in Sources */,
 				AEC5378125B9DD3900BDE7A0 /* Star.swift in Sources */,
 				AEC5378A25B9DDCA00BDE7A0 /* ModelGenerator.swift in Sources */,
 				AEC5377325B9789D00BDE7A0 /* CollectionViewCell.swift in Sources */,
@@ -212,6 +219,7 @@
 				AEC5377E25B9DD1C00BDE7A0 /* Galaxy.swift in Sources */,
 				AEC5375B25B96AA800BDE7A0 /* SceneDelegate.swift in Sources */,
 				AEC5378425B9DD4A00BDE7A0 /* Planet.swift in Sources */,
+				AEC537C825BB66BB00BDE7A0 /* StarCollectionViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

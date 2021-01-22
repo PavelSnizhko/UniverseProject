@@ -19,8 +19,10 @@ class Universe {
 
     weak var delegate: GenerateViaDelegateProtocolGalaxy?
     
-    init(name: String) {
+    init(name: String, delegate: GenerateViaDelegateProtocolGalaxy) {
         self.name = name
+        self.delegate = delegate
+        
     }
     
     func addComponent(component: Compose) {
@@ -31,13 +33,14 @@ class Universe {
 extension Universe: Compose {
     func handleTimePeriod(timeInterval: Int)  {
         self.age += timeInterval
-//        for item in contentArray {
-//            // TODO think if logic is ok
-//            if let galaxy = item as? Galaxy, galaxy.age >= 30{
-//                readyForDestroy.append(galaxy)
-//            }
-//            item.handleTimePeriod(timeInterval: timeInterval)
-//        }
+        for item in contentArray {
+            // TODO think if logic is ok
+            if let galaxy = item as? Galaxy, galaxy.age >= 30{
+                //TODO change arr to SET
+                readyForDestroy.append(galaxy)
+            }
+            item.handleTimePeriod(timeInterval: timeInterval)
+        }
         self.contentArray.append(delegate?.generateGalaxy() as! Compose)
         if self.age != 0 && self.age % 30 == 0 {
             // знайти кращий алгоритм пошуку рандомного елементу

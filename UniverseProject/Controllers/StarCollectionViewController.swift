@@ -1,5 +1,5 @@
 //
-//  GalaxyCollectionViewController.swift
+//  StarCollectionViewController.swift
 //  UniverseProject
 //
 //  Created by Павел Снижко on 22.01.2021.
@@ -8,9 +8,10 @@
 import UIKit
 
 
-class GalaxyCollectionViewController: UICollectionViewController {
+class StarCollectionViewController: UICollectionViewController {
 
-    var galaxies: [Compose] = []
+
+    var stars: [Compose] = []
     let cellId = String(describing: CollectionViewCell.self)
 
 
@@ -18,35 +19,36 @@ class GalaxyCollectionViewController: UICollectionViewController {
         super.viewDidLoad()
         let nib = UINib(nibName: cellId, bundle: .main)
         self.collectionView.register(nib, forCellWithReuseIdentifier: cellId)
+
     }
     
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(galaxies.count)
-        return galaxies.count
+        print(stars.count)
+        return stars.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
     }
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let galaxy = self.galaxies[indexPath.row] as? Galaxy {
-            print("Я в galaxies")
-            let starCollectionVC = storyboard?.instantiateViewController(withIdentifier: "StarCollectionViewController") as? StarCollectionViewController
-//            present(sb, animated: true, completion: nil)?
-            starCollectionVC!.stars = galaxy.contentArray
-            navigationController?.pushViewController(starCollectionVC!, animated: true)
-        }
-    }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let myCell = cell as? CollectionViewCell else { return }
-        let element = galaxies[indexPath.row]
+        let element = stars[indexPath.row]
         myCell.name = "\(element.id)"
         myCell.descriptionItem = element.smallDescription()
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let star = self.stars[indexPath.row] as? Star {
+            print("Я в Star")
+            let planetCollectionVC = storyboard?.instantiateViewController(withIdentifier: "PlanetCollectionViewController") as! PlanetCollectionViewController
+//            present(sb, animated: true, completion: nil)?
+            //TODO: change to private acces for array
+            planetCollectionVC.planets = star.contentArray
+            navigationController?.pushViewController(planetCollectionVC, animated: true)
+        }
+    }
 
 }
-
-

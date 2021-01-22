@@ -11,44 +11,23 @@ typealias PowerModelGenerator = GenerateViaDelegateProtocolGalaxy & GenerateViaD
 
 
 protocol GenerateViaDelegateProtocolGalaxy: class {
-    func generateGalaxy() -> Galaxy
+    func generateGalaxy() -> Compose
 }
 
 
 protocol GenerateViaDelegateProtocolStar: class {
-    func generateStar() -> Star
+    func generateStar() -> Compose
 }
 
 
 
 
 protocol GenerateViaDelegateProtocolPlanet: class {
-    func generatePlanet() -> Planet
+    func generatePlanet() -> Compose
 }
 
 
 
-extension GenerateViaDelegateProtocolStar {
-    func generateStar() -> Star {
-        let type = Star.StarType.allCases.randomElement()!
-        return Star(name: "New Star", weight: Int.random(in: 0..<100), type: type, temeperature: Int.random(in: 0..<100), luminosity: Int.random(in: 0..<100), radius: Int.random(in: 0..<100))
-    }
-}
 
-extension GenerateViaDelegateProtocolPlanet {
-    func generatePlanet() -> Planet {
-        let type = Planet.PlanetType.allCases.randomElement()!
-        return Planet(name: "New Planet + \(type)", weight: Int.random(in: 0..<100), satelliteArray: [], type: type)
-    }
-}
-
-
-extension GenerateViaDelegateProtocolGalaxy {
-    func generateGalaxy() -> Galaxy {
-        print("Was created new Galaxy")
-        let type = Galaxy.GalaxyType.allCases.randomElement()!
-        return Galaxy(name: "New Galaxy + \(type)", type: type)
-    }
-}
 
 

@@ -16,7 +16,7 @@ class Galaxy {
     There is used contentArray because if in our galaxy will be something another than Planet system it would be useful also it's smth like open close princeple
     */
 
-    weak var delegate: GenerateViaDelegateProtocolStar?
+    
     
     enum GalaxyType: CaseIterable {
         case eliptical
@@ -31,13 +31,15 @@ class Galaxy {
     var type: GalaxyType
     var age: Int = 0
     private var weight: Int = 0
-    private var contentArray = [Compose]()
+    var contentArray = [Compose]()
+    weak var delegate: GenerateViaDelegateProtocolStar?
 
     
-    init(name: String, type: GalaxyType, age: Int = 0) {
+    init(name: String, type: GalaxyType, age: Int = 0, delegate: GenerateViaDelegateProtocolStar) {
         self.name = name
         self.type = type
         self.age = age
+        self.delegate = delegate
     }
     
     func increaseWeight(weight: Int) {
@@ -55,7 +57,10 @@ class Galaxy {
     }
     
     func interact(with galaxy: Galaxy) -> Galaxy {
-        let galaxy = Galaxy(name: "Galaxy after interection", type: .eliptical)
+        //TODO: Можливо потрібно використовувати фабрику ?
+        //TODO return self is it ok?
+        guard let delegate = self.delegate else { return self }
+        let galaxy = Galaxy(name: "Galaxy after interection", type: .eliptical, delegate:  delegate)
         galaxy.delegate = self.delegate
         return galaxy
     }
@@ -67,6 +72,11 @@ extension Galaxy: Comparable, Compose {
 
     func handleTimePeriod(timeInterval: Int) {
         self.age += timeInterval
+        print("Wtf where is my star")
+        if let star = delegate?.generateStar(){
+            self.contentArray.append(star)
+            print(contentArray)
+        }
         for item in contentArray {
             item.handleTimePeriod(timeInterval: timeInterval)
         }
@@ -86,7 +96,13 @@ extension Galaxy: Comparable, Compose {
     }
     
     func smallDescription() -> String {
-        return name
+        return name + "\(id)" + "\(type)" + contentArray.reduce(" ", { text, object in
+            if let star = object as? Star {
+                return text + star.name
+            }
+            else {
+                return " "
+            }
+        })
     }
-    
 }

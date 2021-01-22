@@ -14,30 +14,24 @@ class Planet {
         case carbon = " Carbon type of planet "
     }
     
-    weak var delegate: GenerateViaDelegateProtocolPlanet? {
-        get {
-            self.delegate
-        }
-        set {
-            self.delegate = newValue
-        }
-    }
+    weak var delegate: GenerateViaDelegateProtocolPlanet?
     
     var id = arc4random_uniform(100)
     private var name: String
     private var type: PlanetType
     private var weight: Int
-    var satelliteArray: [Planet] = []
+    var satelliteArray: [Compose] = []
     
     //массив для супутников
     private var statelArray: [Compose] = []
     
-    init(name: String, weight: Int, satelliteArray: [Planet], type: PlanetType) {
+    init(name: String, weight: Int, satelliteArray: [Compose], type: PlanetType, delegate: GenerateViaDelegateProtocolPlanet) {
         //можливо винести вибір рандомного супутника окремо
         self.name = name
         self.weight = weight
 //        self.satelliteArray = satelliteArray
         self.type = type
+        self.delegate = delegate
 //        self.delegate = delegate
     }
     

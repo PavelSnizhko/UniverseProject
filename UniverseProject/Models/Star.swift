@@ -30,14 +30,7 @@ class Star {
         case final = "Final evolution stage"
     }
     
-    weak var delegate: GenerateViaDelegateProtocolPlanet? {
-        get {
-            self.delegate
-        }
-        set {
-            self.delegate = newValue
-        }
-    }
+    weak var delegate: GenerateViaDelegateProtocolPlanet?
     var id = arc4random_uniform(100)
     var name: String
     private var type: StarType
@@ -47,10 +40,11 @@ class Star {
     var radius: Int
     
     private var evolutionStage: EvolutionStage
-    private var contentArray = [Compose]()
+    //TODO:  Create as private in the future 
+    var contentArray = [Compose]()
 
     
-    init(name: String, weight: Int, type: StarType, temeperature: Int, luminosity: Int, radius: Int) {
+    init(name: String, weight: Int, type: StarType, temeperature: Int, luminosity: Int, radius: Int, delegate: GenerateViaDelegateProtocolPlanet) {
         self.name = name
         self.evolutionStage = .young
         self.type = type
@@ -58,6 +52,7 @@ class Star {
         self.luminosity = luminosity
         self.weight = weight
         self.radius = radius
+        self.delegate = delegate
 //        self.delegate = delegate
     }
     
@@ -70,8 +65,11 @@ class Star {
 
 extension Star: Compose {
     func handleTimePeriod(timeInterval: Int) {
-        for item in contentArray {
-            item.handleTimePeriod(timeInterval: timeInterval)
+        // think about return
+        guard self.contentArray.count < 9 else { return }
+        if let planet = self.delegate?.generatePlanet() {
+            print(planet)
+            self.contentArray.append(planet)
         }
     }
     

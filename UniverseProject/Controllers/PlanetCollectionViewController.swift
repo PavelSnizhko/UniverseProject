@@ -1,5 +1,5 @@
 //
-//  GalaxyCollectionViewController.swift
+//  PlanetCollectionViewController.swift
 //  UniverseProject
 //
 //  Created by Павел Снижко on 22.01.2021.
@@ -7,10 +7,12 @@
 
 import UIKit
 
+private let reuseIdentifier = "Cell"
 
-class GalaxyCollectionViewController: UICollectionViewController {
-
-    var galaxies: [Compose] = []
+class PlanetCollectionViewController: UICollectionViewController {
+    
+    
+    var planets: [Compose] = []
     let cellId = String(describing: CollectionViewCell.self)
 
 
@@ -22,31 +24,20 @@ class GalaxyCollectionViewController: UICollectionViewController {
     
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(galaxies.count)
-        return galaxies.count
+        print(planets.count)
+        return planets.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
     }
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let galaxy = self.galaxies[indexPath.row] as? Galaxy {
-            print("Я в galaxies")
-            let starCollectionVC = storyboard?.instantiateViewController(withIdentifier: "StarCollectionViewController") as? StarCollectionViewController
-//            present(sb, animated: true, completion: nil)?
-            starCollectionVC!.stars = galaxy.contentArray
-            navigationController?.pushViewController(starCollectionVC!, animated: true)
-        }
-    }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let myCell = cell as? CollectionViewCell else { return }
-        let element = galaxies[indexPath.row]
+        let element = planets[indexPath.row]
         myCell.name = "\(element.id)"
         myCell.descriptionItem = element.smallDescription()
     }
-
+    
 }
-
-
