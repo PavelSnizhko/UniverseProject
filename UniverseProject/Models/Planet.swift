@@ -46,7 +46,9 @@ class Planet {
 }
 
 extension Planet: Compose {
-  
+    func handleTimePeriod(timeInterval: Int) {
+        return
+    }
     
     func showContent() -> String {
         return name
@@ -56,7 +58,4 @@ extension Planet: Compose {
         return name
     }
     
-    func handleTimePeriod() -> Bool {
-        true
-    }
 }

@@ -15,5 +15,6 @@ protocol Compose {
     var id: UInt32 { get }
     func smallDescription() -> String
     func showContent() -> String
-    func handleTimePeriod() -> Bool
+    func handleTimePeriod(timeInterval: Int)
+    
 }

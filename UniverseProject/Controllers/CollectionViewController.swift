@@ -9,28 +9,26 @@ import UIKit
 
 class CollectionViewController: UICollectionViewController {
 
-    
-    var data = [("Pasha", "1234567"), ("Dasha", "534534"), ("Sasha", "142343267")]
+    var modelGenerator = ModelGenerator()
+    var universe: Compose?
+//    var data = [("Pasha", "1234567"), ("Dasha", "534534"), ("Sasha", "142343267")]
     let cellId = String(describing: CollectionViewCell.self)
+    weak var timer: Timer?
     
-//    private var collectionViewController: UICollectionViewController {
-//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-//        let vc = storyboard.instantiateViewController(withIdentifier: "CollectionViewController") as! CollectionViewController
-//        return vc
-//    }
-    
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         let nib = UINib(nibName: cellId, bundle: .main)
         self.collectionView.register(nib, forCellWithReuseIdentifier: cellId)
+        self.universe = self.modelGenerator.createUniverse()
+        createTimer()
+//        self.collectionView.reloadData()
        // Do any additional setup after loading the view.
     }
     
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        return 1
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -38,21 +36,52 @@ class CollectionViewController: UICollectionViewController {
     }
     
     
+    
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let myCell = cell as? CollectionViewCell else { return }
-        myCell.name = data[indexPath.row].0
-        myCell.descriptionItem = data[indexPath.row].1
+        let element = self.universe!
+        myCell.name = "\(element.id)"
+        myCell.descriptionItem = element.smallDescription()
     }
     
-//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let data_ = self.data[indexPath.row]
-//
-//        navigationControler?.pushViewController(collectionViewController, animated: true)
-//
-//
-//    }
     
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let universe = self.universe as? Universe {
+            print("Я тут")
+            let galaxyCollectionVC = storyboard?.instantiateViewController(withIdentifier: "GalaxyCollectionViewController") as! GalaxyCollectionViewController
+//            present(sb, animated: true, completion: nil)?
+            galaxyCollectionVC.galaxies = universe.contentArray
+            navigationController?.pushViewController(galaxyCollectionVC, animated: true)
+        }
+    }
 
+}
+
+extension CollectionViewController {
     
-
+    @objc func handleTimeInterval() {
+        self.universe!.handleTimePeriod(timeInterval: 10)
+        
+//        self.collectionView?.performBatchUpdates({
+//            let indexPath = IndexPath(row: self.universes.count, section: 0)
+//            universes.append(universe)
+//            self.collectionView?.insertItems(at: [indexPath])
+//        }, completion: nil)
+    }
+    
+    func createTimer() {
+      if timer == nil {
+        let timer = Timer(timeInterval: 5.0,
+          target: self,
+          selector: #selector(handleTimeInterval),
+          userInfo: nil,
+          repeats: true)
+        RunLoop.current.add(timer, forMode: .common)
+//        timer.tolerance = 0.1
+        
+        self.timer = timer
+      }
+        
+    }
+        
 }

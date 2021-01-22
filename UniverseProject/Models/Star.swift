@@ -69,8 +69,10 @@ class Star {
 }
 
 extension Star: Compose {
-    func handleTimePeriod() -> Bool {
-        true
+    func handleTimePeriod(timeInterval: Int) {
+        for item in contentArray {
+            item.handleTimePeriod(timeInterval: timeInterval)
+        }
     }
     
     func showContent() -> String {

@@ -22,6 +22,7 @@
 		AEC5378425B9DD4A00BDE7A0 /* Planet.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5378325B9DD4A00BDE7A0 /* Planet.swift */; };
 		AEC5378A25B9DDCA00BDE7A0 /* ModelGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5378925B9DDCA00BDE7A0 /* ModelGenerator.swift */; };
 		AEC5379225B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5379125B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift */; };
+		AEC5379825BAF42A00BDE7A0 /* GalaxyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5379725BAF42800BDE7A0 /* GalaxyCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		AEC5378325B9DD4A00BDE7A0 /* Planet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Planet.swift; sourceTree = "<group>"; };
 		AEC5378925B9DDCA00BDE7A0 /* ModelGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelGenerator.swift; sourceTree = "<group>"; };
 		AEC5379125B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerateViaDelegateProtocol.swift; sourceTree = "<group>"; };
+		AEC5379725BAF42800BDE7A0 /* GalaxyCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GalaxyCollectionViewController.swift; path = UniverseProject/Views/GalaxyCollectionViewController.swift; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 		AEC5378E25B9DE3E00BDE7A0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				AEC5379725BAF42800BDE7A0 /* GalaxyCollectionViewController.swift */,
 				AEC5375C25B96AA800BDE7A0 /* CollectionViewController.swift */,
 			);
 			path = Controllers;
@@ -201,6 +204,7 @@
 				AEC5378A25B9DDCA00BDE7A0 /* ModelGenerator.swift in Sources */,
 				AEC5377325B9789D00BDE7A0 /* CollectionViewCell.swift in Sources */,
 				AEC5379225B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift in Sources */,
+				AEC5379825BAF42A00BDE7A0 /* GalaxyCollectionViewController.swift in Sources */,
 				AEC5377A25B9DC5F00BDE7A0 /* Universe.swift in Sources */,
 				AEC5377725B9D95500BDE7A0 /* Composer.swift in Sources */,
 				AEC5375D25B96AA800BDE7A0 /* CollectionViewController.swift in Sources */,

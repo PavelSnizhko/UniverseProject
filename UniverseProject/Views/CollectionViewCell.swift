@@ -42,7 +42,21 @@ class CollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         name = nil
-        descriptionLabel = nil
+        descriptionItem = nil
     }
+    
+//    private func setState() {
+//      guard let task = task else {
+//        return
+//      }
+//
+//      if task.completed {
+//        taskLabel.attributedText = NSAttributedString(string: task.name,
+//          attributes: [.strikethroughStyle: 1])
+//      } else {
+//        taskLabel.attributedText = NSAttributedString(string: task.name,
+//          attributes: nil)
+//      }
+//    }
     
 }

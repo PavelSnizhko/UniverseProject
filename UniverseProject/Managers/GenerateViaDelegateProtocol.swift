@@ -45,6 +45,7 @@ extension GenerateViaDelegateProtocolPlanet {
 
 extension GenerateViaDelegateProtocolGalaxy {
     func generateGalaxy() -> Galaxy {
+        print("Was created new Galaxy")
         let type = Galaxy.GalaxyType.allCases.randomElement()!
         return Galaxy(name: "New Galaxy + \(type)", type: type)
     }

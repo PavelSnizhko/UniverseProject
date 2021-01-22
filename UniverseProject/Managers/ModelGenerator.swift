@@ -9,6 +9,10 @@ import Foundation
 
 
 class ModelGenerator: PowerModelGenerator {
+    //?
+    init() {
+        
+    }
     
     func generateModel(modelType: Compose) -> Compose {
         if modelType is Galaxy{
@@ -26,10 +30,13 @@ class ModelGenerator: PowerModelGenerator {
             planet.delegate = self
             return planet
         }
-        else {
-            let universe = Universe(name: "New universe")
-            universe.delegate = self
-            return universe
-        }
+        // Clean that
+        return Universe(name: "name")
+    }
+    
+    func createUniverse() -> Compose {
+        let universe = Universe(name: "New universe")
+        universe.delegate = self
+        return universe
     }
 }

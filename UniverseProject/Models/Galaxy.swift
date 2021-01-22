@@ -16,14 +16,7 @@ class Galaxy {
     There is used contentArray because if in our galaxy will be something another than Planet system it would be useful also it's smth like open close princeple
     */
 
-    weak var delegate: GenerateViaDelegateProtocolStar? {
-        get {
-            self.delegate
-        }
-        set {
-            self.delegate = newValue
-        }
-    }
+    weak var delegate: GenerateViaDelegateProtocolStar?
     
     enum GalaxyType: CaseIterable {
         case eliptical
@@ -36,7 +29,7 @@ class Galaxy {
     var id: UInt32 = arc4random_uniform(100)
     var name: String
     var type: GalaxyType
-    private var age: Int = 0
+    var age: Int = 0
     private var weight: Int = 0
     private var contentArray = [Compose]()
 
@@ -72,8 +65,12 @@ class Galaxy {
 
 extension Galaxy: Comparable, Compose {
 
-    func handleTimePeriod() -> Bool {
-        true
+    func handleTimePeriod(timeInterval: Int) {
+        self.age += timeInterval
+        for item in contentArray {
+            item.handleTimePeriod(timeInterval: timeInterval)
+        }
+        
     }
     
     static func < (lhs: Galaxy, rhs: Galaxy) -> Bool {
