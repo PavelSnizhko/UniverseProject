@@ -8,7 +8,7 @@
 import UIKit
 
 class CollectionViewController: UICollectionViewController {
-
+    
     var modelGenerator = ModelGenerator()
     var universe: Compose?
 //    var data = [("Pasha", "1234567"), ("Dasha", "534534"), ("Sasha", "142343267")]
@@ -21,7 +21,7 @@ class CollectionViewController: UICollectionViewController {
         let nib = UINib(nibName: cellId, bundle: .main)
         self.collectionView.register(nib, forCellWithReuseIdentifier: cellId)
         self.universe = self.modelGenerator.createUniverse()
-        createTimer()
+//        createTimer()
 //        self.collectionView.reloadData()
        // Do any additional setup after loading the view.
     }
@@ -50,38 +50,38 @@ class CollectionViewController: UICollectionViewController {
             print("Я тут")
             let galaxyCollectionVC = storyboard?.instantiateViewController(withIdentifier: "GalaxyCollectionViewController") as! GalaxyCollectionViewController
 //            present(sb, animated: true, completion: nil)?
-            galaxyCollectionVC.galaxies = universe.contentArray
+//            galaxyCollectionVC.galaxies = universe.contentArray
             navigationController?.pushViewController(galaxyCollectionVC, animated: true)
         }
     }
 
 }
 
-extension CollectionViewController {
-    
-    @objc func handleTimeInterval() {
-        self.universe!.handleTimePeriod(timeInterval: 10)
-        
-//        self.collectionView?.performBatchUpdates({
-//            let indexPath = IndexPath(row: self.universes.count, section: 0)
-//            universes.append(universe)
-//            self.collectionView?.insertItems(at: [indexPath])
-//        }, completion: nil)
-    }
-    
-    func createTimer() {
-      if timer == nil {
-        let timer = Timer(timeInterval: 5.0,
-          target: self,
-          selector: #selector(handleTimeInterval),
-          userInfo: nil,
-          repeats: true)
-        RunLoop.current.add(timer, forMode: .common)
-//        timer.tolerance = 0.1
-        
-        self.timer = timer
-      }
-        
-    }
-        
-}
+//extension CollectionViewController {
+//    
+////    @objc func handleTimeInterval() {
+////        self.universe!.handleTimePeriod(timeInterval: 10, universeRule: <#UniverseRule#>)
+////
+//////        self.collectionView?.performBatchUpdates({
+//////            let indexPath = IndexPath(row: self.universes.count, section: 0)
+//////            universes.append(universe)
+//////            self.collectionView?.insertItems(at: [indexPath])
+//////        }, completion: nil)
+////    }
+////
+////    func createTimer() {
+////      if timer == nil {
+////        let timer = Timer(timeInterval: 5.0,
+////          target: self,
+////          selector: #selector(handleTimeInterval),
+////          userInfo: nil,
+////          repeats: true)
+////        RunLoop.current.add(timer, forMode: .common)
+//////        timer.tolerance = 0.1
+////
+////        self.timer = timer
+////      }
+//        
+//    }
+//        
+//}

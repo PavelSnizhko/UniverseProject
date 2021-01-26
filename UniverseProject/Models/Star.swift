@@ -7,13 +7,17 @@
 
 import Foundation
 
+protocol PosibleBlackHole: class {
+    func changeStarToBlackHole(star: Star)
+}
+
+
 
 class Star {
     /*
      There is used content array because around star can be rotated not only planet also some asteroids and comets.If we want to expend It will be very usefull
     */
-    
-    enum StarType: CaseIterable {
+    enum StarType: String, CaseIterable {
         case brownDwarfStar
         case redDwarfStar
         case blueGiantStar
@@ -23,61 +27,103 @@ class Star {
         case yellowDwarfStar
     }
     
-    
     private enum EvolutionStage: String {
         case young = "First evolution stage"
         case old = "Second evolution stage"
-        case final = "Final evolution stage"
+        case carlic = "Final evolution stage"
     }
-    
-    weak var delegate: GenerateViaDelegateProtocolPlanet?
-    var id = arc4random_uniform(100)
-    var name: String
-    private var type: StarType
-    var weight: Int
-    var tempterature: Int
-    var luminosity: Int
-    var radius: Int
-    
-    private var evolutionStage: EvolutionStage
-    //TODO:  Create as private in the future 
-    var contentArray = [Compose]()
 
+    var id: UUID
+    private(set) var type: StarType
+    private(set) var age: Int = 0
+    private(set) var weight: Int
+    private(set) var tempterature: Int
+    private(set) var luminosity: Int
+    private(set) var radius: Int
+    private var evolutionStage: EvolutionStage
+    private weak var delegate: PosibleBlackHole?
     
-    init(name: String, weight: Int, type: StarType, temeperature: Int, luminosity: Int, radius: Int, delegate: GenerateViaDelegateProtocolPlanet) {
-        self.name = name
+    
+    init(id: UUID, weight: Int, type: StarType, temeperature: Int, luminosity: Int, radius: Int) {
         self.evolutionStage = .young
         self.type = type
         self.tempterature = temeperature
         self.luminosity = luminosity
         self.weight = weight
         self.radius = radius
-        self.delegate = delegate
+        self.id = id
 //        self.delegate = delegate
     }
-    
-    func addComponent(component: Compose) {
-        contentArray.append(component)
-    }
-    
     
 }
 
 extension Star: Compose {
-    func handleTimePeriod(timeInterval: Int) {
+  
+    func countWeight() -> Int {
+        self.weight
+    }
+    
+    func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
         // think about return
-        guard self.contentArray.count < 9 else { return }
-        if let planet = self.delegate?.generatePlanet() {
-            print(planet)
-            self.contentArray.append(planet)
+        self.age += timeInterval
+        
+        if self.age % 60 == 0 {
+            print("Міняється стан зірки")
+            print("СТАН ЗВЕЗДЫ БЫЛ  \(self.evolutionStage.rawValue) ")
+            if self.evolutionStage == EvolutionStage.young {
+                self.evolutionStage = EvolutionStage.old
+            }
+            else if self.evolutionStage == EvolutionStage.old && self.weight >= universeRule.weightBoundary, self.radius >= universeRule.weightBoundary {
+                delegate?.changeStarToBlackHole(star: self)
+                print("повинна появитись чорна ДІРКА ")
+            }
+            else {
+                self.evolutionStage = EvolutionStage.carlic
+                print(" Star карлик ")
+            }
+            print("СТАН ЗВЕЗДЫ СТАЛ \(self.evolutionStage.rawValue)")
         }
     }
     
+
+    
     func showContent() -> String {
-        return name + evolutionStage.rawValue +  contentArray.reduce("", { $0 + $1.showContent()})
+        return  id.uuidString + type.rawValue + "\(self.age)" + evolutionStage.rawValue
     }
     
     func smallDescription() -> String {
-        return name
+        return id.uuidString + type.rawValue + "\(self.age)"
     }
+}
+
+
+class BlackHole: Compose {
+    func countWeight() -> Int {
+        self.weight
+    }
+    
+    func smallDescription() -> String {
+        return id.uuidString + "I'm black hole"
+    }
+    
+    func showContent() -> String {
+        return "\(id)" +  "\(weight) " + "\(radius)"
+    }
+    
+    func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
+        self.age += timeInterval
+        print("Добавився час в Чорній дирі")
+    }
+    
+    var id: UUID
+    private(set) var age: Int = 0
+    let radius: Int
+    let weight: Int
+    
+    init(id: UUID, weight: Int, radius: Int) {
+        self.id = id
+        self.weight = weight
+        self.radius = radius
+    }
+    
 }

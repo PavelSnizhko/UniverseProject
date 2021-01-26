@@ -30,15 +30,16 @@ class GalaxyCollectionViewController: UICollectionViewController {
         collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
     }
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let galaxy = self.galaxies[indexPath.row] as? Galaxy {
-            print("Я в galaxies")
-            let starCollectionVC = storyboard?.instantiateViewController(withIdentifier: "StarCollectionViewController") as? StarCollectionViewController
-//            present(sb, animated: true, completion: nil)?
-            starCollectionVC!.stars = galaxy.contentArray
-            navigationController?.pushViewController(starCollectionVC!, animated: true)
-        }
-    }
+//    TODO: I commented this to change later 
+//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        if let galaxy = self.galaxies[indexPath.row] as? Galaxy {
+//            print("Я в galaxies")
+//            let starCollectionVC = storyboard?.instantiateViewController(withIdentifier: "StarCollectionViewController") as? StarCollectionViewController
+////            present(sb, animated: true, completion: nil)?
+//            starCollectionVC!.stars = galaxy.contentArray
+//            navigationController?.pushViewController(starCollectionVC!, animated: true)
+//        }
+//    }
     
     override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let myCell = cell as? CollectionViewCell else { return }

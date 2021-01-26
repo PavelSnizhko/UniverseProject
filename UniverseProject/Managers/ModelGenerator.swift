@@ -9,55 +9,47 @@ import Foundation
 
 
 class ModelGenerator: PowerModelGenerator {
+ 
     
-    func generateStar() -> Compose {
+    func generateBlackHole(star: Star) -> BlackHole {
+        return BlackHole(id: star.id, weight: star.weight, radius: star.radius)
+    }
+    
+
+    
+    func generatePlanetarySystem(galaxyDelegat: Galaxy) -> Compose {
+//        print("Was created new planetarySystem ")
         let type = Star.StarType.allCases.randomElement()!
-        return Star(name: "New Star", weight: Int.random(in: 0..<100), type: type, temeperature: Int.random(in: 0..<100), luminosity: Int.random(in: 0..<100), radius: Int.random(in: 0..<100), delegate: self)
+        return PlanetarySystem(id: UUID(), delegateModelGenerator: self, delegateDestroyPlanetarySystem: galaxyDelegat, mainStar: Star(id: UUID(), weight: Int.random(in: 0..<100), type: type, temeperature: Int.random(in: 0..<100), luminosity: Int.random(in: 0..<100), radius: Int.random(in: 0..<100)))
     }
     
     func generatePlanet() -> Compose {
+//        print("Was created new planet")
         let type = Planet.PlanetType.allCases.randomElement()!
-        return Planet(name: "New Planet + \(type)", weight: Int.random(in: 0..<100), satelliteArray: generateStatelite(), type: type, delegate: self)
+        return Planet(weight: Int.random(in: 0..<100), satelliteArray: generateStatelite(), type: type, delegate: self, id: UUID())
     }
 
-    func generateStatelite() -> [Compose] {
-        var statelites: [Compose] = []
+    func generateStatelite() -> [String:Compose] {
+//        print("Was created new statelites")
+        var statelites: [String:Compose] = [:]
         for _ in 0..<(Int.random(in: 0..<6)) {
             let type = Planet.PlanetType.allCases.randomElement()!
-            statelites.append(Planet(name: "New Planet + \(type)", weight: Int.random(in: 0..<100), satelliteArray: [], type: type, delegate: self))
+            let statelite = Planet(weight: Int.random(in: 0..<100), satelliteArray: [:], type: type, delegate: nil, id: UUID())
+            statelites[statelite.id.uuidString] = statelite
         }
         return statelites
     }
 
     func generateGalaxy() -> Compose {
-        print("Was created new Galaxy")
+//        print("Was created a new galaxy")
         let type = Galaxy.GalaxyType.allCases.randomElement()!
-        return Galaxy(name: "New Galaxy + \(type)", type: type, delegate: self)
+        return Galaxy(id: UUID(), type: type, delegate: self)
     }
 
     
-//    func generateModel(modelType: Compose) -> Compose {
-//        if modelType is Galaxy{
-//            let galaxy = generateGalaxy()
-//            galaxy.delegate = self
-//            return galaxy
-//        }
-//        else if  modelType is Star {
-//            let star = generateStar()
-//            star.delegate = self
-//            return star
-//        }
-//        else if  modelType is Planet {
-//            let planet = generatePlanet()
-//            planet.delegate = self
-//            return planet
-//        }
-//        // Clean that
-//        return Universe(name: "name")
-//    }
-    
     func createUniverse() -> Compose {
-        let universe = Universe(name: "Single Universe", delegate: self)
+        let universe = Universe(id: UUID(), delegate: self, timePeriod: 10, universeRule: UniverseRule(radiusBoundary: 50, weightBoundary: 50))
         return universe
     }
+    
 }

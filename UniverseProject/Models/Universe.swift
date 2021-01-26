@@ -7,73 +7,127 @@
 
 import Foundation
 
-class Universe {
-    var id: UInt32 = arc4random_uniform(100)
-    var name: String
-    let timer = Timer()
-    var age: Int = 0
+struct UniverseRule {
+   let radiusBoundary: Int
+   let weightBoundary: Int
     
-    var contentArray = [Compose]()
-    //make like a set
-    private var readyForDestroy = [Compose]()
+}
+
+class Universe {
+    var id: UUID
+    private var timer: Timer?
+    var age: Int = 0
+    var universeRule: UniverseRule
+    var contentArray: [String:Compose] = [:]
+    private var readyForDestroy: [String: Galaxy] = [:]
 
     weak var delegate: GenerateViaDelegateProtocolGalaxy?
     
-    init(name: String, delegate: GenerateViaDelegateProtocolGalaxy) {
-        self.name = name
+    init(id: UUID, delegate: GenerateViaDelegateProtocolGalaxy, timePeriod: Int, universeRule: UniverseRule) {
+        self.id = id
         self.delegate = delegate
-        
+        self.universeRule = universeRule
+        self.timer = Timer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
+        if let timer = timer {
+            RunLoop.current.add(timer, forMode: .common)
+        }
     }
     
     func addComponent(component: Compose) {
-        contentArray.append(component)
+        contentArray[component.id.uuidString] = component
     }
 }
 
-extension Universe: Compose {
-    func handleTimePeriod(timeInterval: Int)  {
+
+
+extension Universe: Compose{
+    func countWeight() -> Int {
+        return contentArray.values.reduce(0, {$0 + $1.countWeight()})
+    }
+    
+    @objc func updateTimer(timeInterval: Int) {
+        handleTimePeriod(timeInterval: 10, universeRule: self.universeRule)
+    }
+    
+    func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule)  {
         self.age += timeInterval
-        for item in contentArray {
-            // TODO think if logic is ok
-            if let galaxy = item as? Galaxy, galaxy.age >= 30{
-                //TODO change arr to SET
-                readyForDestroy.append(galaxy)
-            }
-            item.handleTimePeriod(timeInterval: timeInterval)
+        print("\(timeInterval) СЕКУНД ВО ВСЕЛЕННОЙ")
+        print("Общее время \(self.age)")
+        
+        
+        if let component = delegate?.generateGalaxy(){
+
+            contentArray[component.id.uuidString] = component
+            print("СОЗДАНА НОВАЯ ГАЛАКТИКА")
         }
-        self.contentArray.append(delegate?.generateGalaxy() as! Compose)
-        if self.age != 0 && self.age % 30 == 0 {
+        if self.age % 30 == 0 && self.readyForDestroy.count >= 2  {
+            print("БУДЕТ СОЗДАНА НОВАЯ ГАЛАКТИКА А ТООЧНЕЕ СЛИЯНИЕ ДВУХ ГАЛАКТИК в \(self.contentArray.keys)")
             // знайти кращий алгоритм пошуку рандомного елементу
-            guard let galaxy1 = readyForDestroy.randomElement() as? Galaxy, let galaxy2 = readyForDestroy.randomElement() as? Galaxy else  { return }
-            
-            if galaxy1 >= galaxy2 {
-                let newGalaxy = galaxy1.interact(with: galaxy2)
-                contentArray.append(newGalaxy)
-                readyForDestroy.append(newGalaxy)
-                print("Was add new  \(newGalaxy) and destroyed \(galaxy2)")
-            }
-            else {
-                let newGalaxy = galaxy2.interact(with: galaxy1)
-                contentArray.append(newGalaxy)
-                print("Was add new  \(newGalaxy) and destroyed \(galaxy1)")
-            }
+            // TODO: think about alghorithm
+            self.galaxyInteraction()
+            print("СОЗДАНА НОВАЯ ГАЛАКТИКА А ТООЧНЕЕ СЛИЯНИЕ ДВУХ ГАЛАКТИК в \(self.contentArray.keys)")
         }
+        
+        for component in contentArray.values {
+            // TODO think if logic is ok
+            //TODO change galaxy age to 180
+            if let galaxy = component as? Galaxy, galaxy.age >= 180, readyForDestroy[galaxy.id.uuidString] == nil {
+                readyForDestroy[galaxy.id.uuidString] = galaxy
+                print("ДОБАВЛЕНА ГАЛАКТИКА ДЛЯ УНИЧТОЖЕНИЯ \(galaxy.id) С ВОЗРАСТОМ \(galaxy.age)")
+            }
+            component.handleTimePeriod(timeInterval: timeInterval, universeRule: self.universeRule)
+        }
+    
+        
+    
        
     }
     
+    
     func showContent() -> String {
-        return contentArray.reduce(" ", { $0 + $1.showContent()})
+        return contentArray.values.reduce(" ", { $0 + $1.showContent()})
     }
     
     func smallDescription() -> String {
-        // TODO: можливо weak self ?
-        return name + contentArray.reduce(" ", { text, object in
+        //TODO: remake this mathod
+        return contentArray.values.reduce(" ", { text, object in
             if let galaxy = object as? Galaxy {
-                return text + galaxy.name
+                return text + String(galaxy.id.uuidString)
             }
             else {
                 return " "
             }
         })
     }
+}
+
+
+private extension Universe {
+    func galaxyInteraction() {
+        //TODO readyForDestroy.values.randomElement() може вибрати однакові елементи змінити це
+        var firstGalaxy: Galaxy
+        var secondGalaxy: Galaxy
+        repeat {
+            guard let galaxy1 = readyForDestroy.values.randomElement(),let galaxy2 = readyForDestroy.values.randomElement() else  { return }
+            firstGalaxy = galaxy1
+            secondGalaxy = galaxy2
+        } while firstGalaxy.id != secondGalaxy.id
+        
+        var newGalaxy: Galaxy
+        if firstGalaxy >= secondGalaxy {
+            newGalaxy = firstGalaxy.interact(with: secondGalaxy)
+            print("Was add new  \(newGalaxy) and destroyed \(secondGalaxy)")
+        }
+        else {
+            newGalaxy = secondGalaxy.interact(with: firstGalaxy)
+            print("Was add new  \(newGalaxy) and destroyed \(firstGalaxy)")
+        }
+        contentArray[firstGalaxy.id.uuidString] = nil
+        contentArray[newGalaxy.id.uuidString] = newGalaxy
+        readyForDestroy[newGalaxy.id.uuidString] = newGalaxy
+        readyForDestroy[firstGalaxy.id.uuidString] = nil
+        readyForDestroy[secondGalaxy.id.uuidString] = nil
+        print("Galaxt interection закінчилось")
+    }
+    
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-typealias PowerModelGenerator = GenerateViaDelegateProtocolGalaxy & GenerateViaDelegateProtocolPlanet & GenerateViaDelegateProtocolStar
+typealias PowerModelGenerator = GenerateViaDelegateProtocolGalaxy & GenerateViaDelegateProtocolPlanet & GenerateViaDelegateProtocolPlanetarySystem & GenerateViaDelegateProtocolSatellite & GenerateViaDelegateProtocolBlackHole
 
 
 protocol GenerateViaDelegateProtocolGalaxy: class {
@@ -15,15 +15,21 @@ protocol GenerateViaDelegateProtocolGalaxy: class {
 }
 
 
-protocol GenerateViaDelegateProtocolStar: class {
-    func generateStar() -> Compose
+protocol GenerateViaDelegateProtocolPlanetarySystem: class {
+    func generatePlanetarySystem(galaxyDelegat: Galaxy) -> Compose
 }
-
-
 
 
 protocol GenerateViaDelegateProtocolPlanet: class {
     func generatePlanet() -> Compose
+}
+
+protocol GenerateViaDelegateProtocolSatellite: class {
+    func generateStatelite() -> [String:Compose]
+}
+
+protocol GenerateViaDelegateProtocolBlackHole: class {
+    func generateBlackHole(star: Star) -> BlackHole
 }
 
 

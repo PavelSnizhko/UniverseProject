@@ -14,22 +14,21 @@ class Planet {
         case carbon = " Carbon type of planet "
     }
     
-    weak var delegate: GenerateViaDelegateProtocolPlanet?
+    weak var delegate: GenerateViaDelegateProtocolSatellite?
     
-    var id = arc4random_uniform(100)
-    private var name: String
-    private var type: PlanetType
-    private var weight: Int
-    var satelliteArray: [Compose] = []
+    var id: UUID
+    private(set) var type: PlanetType
+    private(set) var weight: Int
+    private(set) var age: Int = 0
+    private(set) var contentArray: [String:Compose] = [:]
     
     //массив для супутников
     private var statelArray: [Compose] = []
     
-    init(name: String, weight: Int, satelliteArray: [Compose], type: PlanetType, delegate: GenerateViaDelegateProtocolPlanet) {
-        //можливо винести вибір рандомного супутника окремо
-        self.name = name
+    init(weight: Int, satelliteArray: [String:Compose], type: PlanetType, delegate: GenerateViaDelegateProtocolSatellite?, id: UUID) {
+        self.id = id
         self.weight = weight
-//        self.satelliteArray = satelliteArray
+        self.contentArray = satelliteArray
         self.type = type
         self.delegate = delegate
 //        self.delegate = delegate
@@ -40,16 +39,24 @@ class Planet {
 }
 
 extension Planet: Compose {
-    func handleTimePeriod(timeInterval: Int) {
-        return
+    func countWeight() -> Int {
+        return contentArray.values.reduce(0, { $0 + $1.countWeight() } )
+    }
+    
+
+    func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
+        self.age += timeInterval
+        print("Планета \(id.uuidString) прожила \(self.age)")
     }
     
     func showContent() -> String {
-        return name
+        //TODO create prety show content
+        return id.uuidString + type.rawValue
     }
     
     func smallDescription() -> String {
-        return name
+        return id.uuidString + type.rawValue
     }
+    
     
 }

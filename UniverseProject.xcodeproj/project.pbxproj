@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE7FAB9825C04D8800D4E66F /* PlanetarySystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7FAB9725C04D8800D4E66F /* PlanetarySystem.swift */; };
 		AEC5375925B96AA800BDE7A0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5375825B96AA800BDE7A0 /* AppDelegate.swift */; };
 		AEC5375B25B96AA800BDE7A0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5375A25B96AA800BDE7A0 /* SceneDelegate.swift */; };
 		AEC5375D25B96AA800BDE7A0 /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEC5375C25B96AA800BDE7A0 /* CollectionViewController.swift */; };
@@ -28,6 +29,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE7FAB9725C04D8800D4E66F /* PlanetarySystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetarySystem.swift; sourceTree = "<group>"; };
 		AEC5375525B96AA800BDE7A0 /* UniverseProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UniverseProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEC5375825B96AA800BDE7A0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AEC5375A25B96AA800BDE7A0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -101,6 +103,7 @@
 				AEC5377D25B9DD1C00BDE7A0 /* Galaxy.swift */,
 				AEC5378025B9DD3900BDE7A0 /* Star.swift */,
 				AEC5378325B9DD4A00BDE7A0 /* Planet.swift */,
+				AE7FAB9725C04D8800D4E66F /* PlanetarySystem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				AEC5378A25B9DDCA00BDE7A0 /* ModelGenerator.swift in Sources */,
 				AEC5377325B9789D00BDE7A0 /* CollectionViewCell.swift in Sources */,
 				AEC5379225B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift in Sources */,
+				AE7FAB9825C04D8800D4E66F /* PlanetarySystem.swift in Sources */,
 				AEC5379825BAF42A00BDE7A0 /* GalaxyCollectionViewController.swift in Sources */,
 				AEC5377A25B9DC5F00BDE7A0 /* Universe.swift in Sources */,
 				AEC5377725B9D95500BDE7A0 /* Composer.swift in Sources */,

@@ -40,15 +40,16 @@ class StarCollectionViewController: UICollectionViewController {
         myCell.descriptionItem = element.smallDescription()
     }
     
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let star = self.stars[indexPath.row] as? Star {
-            print("Я в Star")
-            let planetCollectionVC = storyboard?.instantiateViewController(withIdentifier: "PlanetCollectionViewController") as! PlanetCollectionViewController
-//            present(sb, animated: true, completion: nil)?
-            //TODO: change to private acces for array
-            planetCollectionVC.planets = star.contentArray
-            navigationController?.pushViewController(planetCollectionVC, animated: true)
-        }
-    }
+    //TODO I comment all 
+//    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+//        if let star = self.stars.values[indexPath.row] as? Star {
+//            print("Я в Star")
+//            let planetCollectionVC = storyboard?.instantiateViewController(withIdentifier: "PlanetCollectionViewController") as! PlanetCollectionViewController
+////            present(sb, animated: true, completion: nil)?
+//            //TODO: change to private acces for array
+//            planetCollectionVC.planets =
+//            navigationController?.pushViewController(planetCollectionVC, animated: true)
+//        }
+//    }
 
 }
