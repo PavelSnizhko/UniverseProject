@@ -41,7 +41,7 @@ class Star {
     private(set) var luminosity: Int
     private(set) var radius: Int
     private var evolutionStage: EvolutionStage
-    private weak var delegate: PosibleBlackHole?
+    private weak var blackHoleDelegate: PosibleBlackHole?
     
     
     init(id: UUID, weight: Int, type: StarType, temeperature: Int, luminosity: Int, radius: Int) {
@@ -58,7 +58,12 @@ class Star {
 }
 
 extension Star: Compose {
-  
+    
+    func setDelegate(blackHoleDelegate: PosibleBlackHole) -> Star {
+        self.blackHoleDelegate = blackHoleDelegate
+        return self
+    }
+    
     func countWeight() -> Int {
         self.weight
     }
@@ -66,7 +71,6 @@ extension Star: Compose {
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
         // think about return
         self.age += timeInterval
-        
         if self.age % 60 == 0 {
             print("Міняється стан зірки")
             print("СТАН ЗВЕЗДЫ БЫЛ  \(self.evolutionStage.rawValue) ")
@@ -74,12 +78,10 @@ extension Star: Compose {
                 self.evolutionStage = EvolutionStage.old
             }
             else if self.evolutionStage == EvolutionStage.old && self.weight >= universeRule.weightBoundary, self.radius >= universeRule.weightBoundary {
-                delegate?.changeStarToBlackHole(star: self)
-                print("повинна появитись чорна ДІРКА ")
+                blackHoleDelegate?.changeStarToBlackHole(star: self)
             }
             else {
                 self.evolutionStage = EvolutionStage.carlic
-                print(" Star карлик ")
             }
             print("СТАН ЗВЕЗДЫ СТАЛ \(self.evolutionStage.rawValue)")
         }

@@ -25,7 +25,7 @@ class Galaxy {
     private(set) var type: GalaxyType
     private(set) var age: Int = 0
     private(set) var weight: Int = 0
-    private(set) var contentArray: [String:Compose] = [:]
+    private(set) var contentDict: [String:Compose] = [:]
     private weak var delegate: GenerateViaDelegateProtocolPlanetarySystem?
     private weak var appendBlackHole: GenerateViaDelegateProtocolBlackHole?
     
@@ -42,7 +42,7 @@ class Galaxy {
         self.type = type
         self.age = age
         self.delegate = delegate
-        self.contentArray = contentArray
+        self.contentDict = contentArray
     }
     
     func increaseWeight(weight: Int) {
@@ -51,7 +51,7 @@ class Galaxy {
     
     
     func addComponent(component: Compose) {
-        contentArray[component.id.uuidString] = component
+        contentDict[component.id.uuidString] = component
     }
     
     
@@ -63,12 +63,12 @@ class Galaxy {
         //TODO: Можливо потрібно використовувати фабрику ?
         //TODO return self is it ok?
         //TODO потерей 10% звездно-планетарных систем з обох галактик
-        print("\(self.contentArray) dictionary before")
-        print("\(self.contentArray.count) + Before ")
+        print("\(self.contentDict.count) + count of elemets in dict ")
         print("\(self.id.uuidString) И \(galaxy.id.uuidString)")
-        
-        var newDict = self.contentArray.reduce(into: galaxy.contentArray) { (r, e) in r[e.0] = e.1 }
-        print("\(newDict.count) + after ")
+
+        var newDict = self.contentDict.reduce(into: galaxy.contentDict) { (r, e) in r[e.0] = e.1 }
+        print("\(newDict) + Do izmenenii")
+        print("\(newDict.count) +  Do izmenenii count of elemets in dict  ")
         let numberElemetsForDestroying = Int(Double(newDict.count) * 0.1)
         for _ in 0..<numberElemetsForDestroying {
             if let id = newDict.keys.randomElement() {
@@ -79,7 +79,7 @@ class Galaxy {
             }
         
         }
-        print(" После Изминениц dictionary \(newDict) ")
+        print(" После Изминений dictionary \(newDict.count) ")
         //TODO change using fabric or smth else
         let galaxy = Galaxy(id: UUID(), type: self.type, age: self.age, delegate: self.delegate, contentArray: newDict)
         galaxy.delegate = self.delegate
@@ -91,7 +91,7 @@ class Galaxy {
 
 extension Galaxy: Comparable, Compose {
     func countWeight() -> Int {
-        self.weight = contentArray.values.reduce(0, {$0 + $1.countWeight()})
+        self.weight = contentDict.values.reduce(0, {$0 + $1.countWeight()})
         return self.weight
     }
     
@@ -102,11 +102,11 @@ extension Galaxy: Comparable, Compose {
         self.age += timeInterval
         
         if let planetarySystem = delegate?.generatePlanetarySystem(galaxyDelegat: self){
-            contentArray[planetarySystem.id.uuidString] = planetarySystem
-            print("Створа нова планетарна система \(planetarySystem.id.uuidString)")
-            print("Загальна кількість планетарних систем  \(contentArray)")
+            contentDict[planetarySystem.id.uuidString] = planetarySystem
+//            print("Створа нова планетарна система \(planetarySystem.id.uuidString)")
+            print("Загальна кількість планетарних систем  \(contentDict.count)")
         }
-        for item in contentArray.values {
+        for item in contentDict.values {
             item.handleTimePeriod(timeInterval: timeInterval, universeRule: universeRule)
         }
         
@@ -121,26 +121,30 @@ extension Galaxy: Comparable, Compose {
     }
     
     func showContent() -> String {
-        return contentArray.values.reduce("", { $0 + $1.showContent()})
+        return contentDict.values.reduce("", { $0 + $1.showContent()})
     }
     
     func smallDescription() -> String {
 //    TODO:  smallDescription()  call from star and update collection view 
-        return "\(age)" + "\(id)" + "\(type)" + contentArray.reduce(" ", { text, object in
-            if let star = object as? Star {
-                return text + star.id.uuidString
-            }
-            else {
-                return " "
-            }
-        })
+        return "Age: \(age)" + "Type: \(type)" + "Кількість п.с.  \(contentDict.count)"
+//        reduce(" ", { text, object in
+//            if let star = object as? Star {
+//                return text + star.id.uuidString
+//            }
+//            else {
+//                return " "
+//            }
+//        })
     }
 }
 
 
 extension Galaxy: DestroyPlanetarySystem {
+    // To have posibility in future acces by id to black hole I should not save under planerary system id but under blackHol's
     func destroyPlanetarySystem(id: String, blackHole: BlackHole) {
-        self.contentArray[id] = blackHole
+        print("Зараз буде знищення цілої планетної системи в Галактиці \(self.contentDict[id]!)")
+        self.contentDict[id] = nil
+        self.contentDict[blackHole.id.uuidString] = blackHole
     }
     
     

@@ -10,7 +10,7 @@ protocol Compose {
     /*
      Implementation two patterns such as compositor pattern and chain of responsibility
      The universe system views like a tree that's why using compositor
-     Chaing of responsibility to arrive a time interval from timer to handler(branches and leafs in our tree)
+     Chain of responsibility to arrive a time interval from timer to handler(branches and leafs in our tree)
     */
     var id: UUID { get }
     func countWeight() -> Int

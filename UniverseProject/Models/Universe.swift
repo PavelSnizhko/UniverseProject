@@ -27,7 +27,7 @@ class Universe {
         self.id = id
         self.delegate = delegate
         self.universeRule = universeRule
-        self.timer = Timer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
+        self.timer = Timer(timeInterval: 10, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
         if let timer = timer {
             RunLoop.current.add(timer, forMode: .common)
         }
@@ -90,14 +90,15 @@ extension Universe: Compose{
     
     func smallDescription() -> String {
         //TODO: remake this mathod
-        return contentArray.values.reduce(" ", { text, object in
-            if let galaxy = object as? Galaxy {
-                return text + String(galaxy.id.uuidString)
-            }
-            else {
-                return " "
-            }
-        })
+        return "Count of galaxies \(contentArray.count)"
+//            contentArray.values.reduce(" ", { text, object in
+//            if let galaxy = object as? Galaxy {
+//                return "\(galaxy.age) \(galaxy.id)"
+//            }
+//            else {
+//                return " "
+//            }
+//        })
     }
 }
 
@@ -108,10 +109,10 @@ private extension Universe {
         var firstGalaxy: Galaxy
         var secondGalaxy: Galaxy
         repeat {
-            guard let galaxy1 = readyForDestroy.values.randomElement(),let galaxy2 = readyForDestroy.values.randomElement() else  { return }
+            guard let galaxy1 = readyForDestroy.values.randomElement(), let galaxy2 = readyForDestroy.values.randomElement() else  { return }
             firstGalaxy = galaxy1
             secondGalaxy = galaxy2
-        } while firstGalaxy.id != secondGalaxy.id
+        } while firstGalaxy.id == secondGalaxy.id
         
         var newGalaxy: Galaxy
         if firstGalaxy >= secondGalaxy {

@@ -35,6 +35,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        backgroundColor = .link
         // Initialization code
     }
     

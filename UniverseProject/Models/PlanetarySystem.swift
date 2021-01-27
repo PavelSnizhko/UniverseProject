@@ -28,9 +28,9 @@ class PlanetarySystem: Compose, PosibleBlackHole {
     
     init(id: UUID, delegateModelGenerator: ModelGenerator, delegateDestroyPlanetarySystem: Galaxy, mainStar: Star) {
         self.id = id
+        self.star = mainStar.setDelegate(blackHoleDelegate: self)
         self.delegateModelGenerator = delegateModelGenerator
         self.delegateDestroyPlanetarySystem = delegateDestroyPlanetarySystem
-        
     }
     
     func smallDescription() -> String {
@@ -48,9 +48,8 @@ class PlanetarySystem: Compose, PosibleBlackHole {
                 contentArray[component.id.uuidString] = component
             }
         }
-        if self.age % 60 == 0 {
-            self.star?.handleTimePeriod(timeInterval: timeInterval, universeRule: universeRule)
-        }
+        print("sssssssUUUUUUUUUUUUUUUUUUU")
+        self.star?.handleTimePeriod(timeInterval: timeInterval, universeRule: universeRule)
     }
     
     
