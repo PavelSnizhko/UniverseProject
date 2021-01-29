@@ -21,10 +21,18 @@ class PlanetarySystem: Compose, PosibleBlackHole {
     var id: UUID
     var age: Int = 0
     private(set) var star: Compose?
-    private(set) var componentsDict: [UUID:Compose] = [:]
+    private(set) var componentsDict: [UUID:Compose] = [:] {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadDelegate?.reloadData(component: nil)
+
+            }
+        }
+    }
     weak var delegateModelGenerator: GenerateViaDelegateNewComponent?
     weak var delegateDestroyPlanetarySystem: DestroyPlanetarySystem?
     weak var reloadDelegate: ReloadDataDelegate?
+    weak var deleteDelegate: DeleteDataDelegate?
 
 
     
@@ -64,7 +72,11 @@ class PlanetarySystem: Compose, PosibleBlackHole {
         guard let blackHole = self.delegateModelGenerator?.generateBlackHole(star: star) else { return }
         print("Black Hole" + blackHole.id.uuidString)
         self.star = blackHole
+        DispatchQueue.main.async {
+            self.reloadDelegate?.reloadData(component: self)
+        }
         delegateDestroyPlanetarySystem?.destroyPlanetarySystem(id: self.id, blackHole: blackHole )
+
         print(" Black hole transparent to Galaxy")
     }
     

@@ -57,26 +57,17 @@ extension UniverseViewController: UICollectionViewDelegate, UICollectionViewData
         if let universe = self.universe as? Universe {
             let galaxyVC = storyboard?.instantiateViewController(withIdentifier: "GalaxyViewController") as! GalaxyViewController
             galaxyViewController = galaxyVC
-            
-            //            present(sb, animated: true, completion: nil)?
-            galaxyVC.galaxies = universe.getComponents()
+            galaxyVC.component = universe
             navigationController?.pushViewController(galaxyVC, animated: true)
+            
         }
     }
 }
 
 extension UniverseViewController: ReloadDataDelegate {
     func reloadData(component: Compose?) {
-        //change using delegate maybe?
-        if let component = component {
-            galaxyViewController?.appendNewCell(compenent: component)
-            print("Я ДОБАВЛЯЛ ЧЕСТНО !!!!")
-            print(galaxyViewController)
-        }
-     
-        DispatchQueue.main.async { [weak self] in
-            self?.collectionView?.reloadData()
-        }
+        self.collectionView?.reloadData()
+        self.galaxyViewController?.reloadData(component: nil)
     }
     
     
@@ -85,7 +76,7 @@ extension UniverseViewController: ReloadDataDelegate {
 
 
 
-extension UniverseViewController {
+private extension UniverseViewController {
     func configUICollectionView(cellId: String) {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -102,54 +93,3 @@ extension UniverseViewController {
     }
     
 }
-
-//    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return 1
-//    }
-//
-//    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-//    }
-//
-//
-//
-//    override func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-//        guard let myCell = cell as? CollectionViewCell else { return }
-//        let element = self.universe!
-//        myCell.name = "\(element.id)"
-//        myCell.descriptionItem = element.smallDescription()
-//    }
-//
-//
-  
-
-//}
-
-//extension CollectionViewController {
-//    
-////    @objc func handleTimeInterval() {
-////        self.universe!.handleTimePeriod(timeInterval: 10, universeRule: <#UniverseRule#>)
-////
-//////        self.collectionView?.performBatchUpdates({
-//////            let indexPath = IndexPath(row: self.universes.count, section: 0)
-//////            universes.append(universe)
-//////            self.collectionView?.insertItems(at: [indexPath])
-//////        }, completion: nil)
-////    }
-////
-////    func createTimer() {
-////      if timer == nil {
-////        let timer = Timer(timeInterval: 5.0,
-////          target: self,
-////          selector: #selector(handleTimeInterval),
-////          userInfo: nil,
-////          repeats: true)
-////        RunLoop.current.add(timer, forMode: .common)
-//////        timer.tolerance = 0.1
-////
-////        self.timer = timer
-////      }
-//        
-//    }
-//        
-//}

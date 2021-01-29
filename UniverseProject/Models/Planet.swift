@@ -20,11 +20,15 @@ class Planet {
     private(set) var type: PlanetType
     private(set) var weight: Int
     private(set) var age: Int = 0
-    private(set) var componentsDict: [UUID : Compose] = [:]
-    weak var reloadDelegate: ReloadDataDelegate?
+    private(set) var componentsDict: [UUID : Compose] = [:] {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadDelegate?.reloadData(component: nil)
 
-    
-    //массив для супутников
+            }
+        }
+    }
+    weak var reloadDelegate: ReloadDataDelegate?
     private var statelArray: [Compose] = []
     
     init(weight: Int, satelliteArray: [UUID:Compose], type: PlanetType, delegate: GenerateViaDelegateProtocolSatellite?, id: UUID) {
@@ -33,7 +37,6 @@ class Planet {
         self.componentsDict = satelliteArray
         self.type = type
         self.delegate = delegate
-//        self.delegate = delegate
     }
     
     
@@ -54,15 +57,16 @@ extension Planet: Compose {
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
         self.age += timeInterval
         print("Планета \(id.uuidString) прожила \(self.age)")
+        self.reloadDelegate?.reloadData(component: nil)
     }
     
     func showContent() -> String {
         //TODO create prety show content
-        return id.uuidString + type.rawValue
+        return  id.uuidString + "\t" + type.rawValue
     }
     
     func smallDescription() -> String {
-        return id.uuidString + type.rawValue
+        return id.uuidString + "\t" + type.rawValue
     }
     
     

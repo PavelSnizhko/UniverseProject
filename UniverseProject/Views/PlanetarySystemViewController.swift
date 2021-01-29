@@ -10,25 +10,17 @@ import UIKit
 class PlanetarySystemViewController: UIViewController {
     var currentId: UUID?
     weak var planetViewController: PlanetViewController?
-    var planetarySystems: [Compose] = []
+    weak var component: Compose?
+    var planetarySystems: [Compose] {
+        component?.getComponents() ?? []
+    }
 //    var planetaryKeys: [UUID]?
     let cellId = String(describing: PlanetaryViewCell.self)
     var collectionView: UICollectionView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nib = UINib(nibName: cellId, bundle: .main)
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: view.frame.size.width, height: view.frame.size.height / 8)
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView?.backgroundColor = .white
-
-        collectionView?.register(nib, forCellWithReuseIdentifier: cellId)
-        view.addSubview(collectionView!)
-        collectionView?.delegate = self
-        collectionView?.dataSource = self
+        configUI()
     }
     
     override func viewDidLayoutSubviews() {
@@ -50,6 +42,7 @@ extension PlanetarySystemViewController: UICollectionViewDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let myCell = cell as? PlanetaryViewCell, let planetarySystem = planetarySystems[indexPath.row] as? PlanetarySystem  else { return }
         planetarySystem.reloadDelegate = self
+        planetarySystem.deleteDelegate = self
         myCell.updatePlanetary(component: planetarySystem)
     }
     
@@ -57,52 +50,49 @@ extension PlanetarySystemViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         planetViewController = storyboard?.instantiateViewController(withIdentifier: "PlanetViewController") as? PlanetViewController
-        let component = self.planetarySystems[indexPath.row]
-        planetViewController?.planets = component.getComponents()
+        guard  let component = self.planetarySystems[indexPath.row] as? PlanetarySystem else { return }
+        planetViewController?.component = component
         guard let planetVC = planetViewController else { return }
         navigationController?.pushViewController(planetVC, animated: true)
     }
-    
-   
-    
 }
 
 
-extension PlanetarySystemViewController: ReloadDataDelegate {
+private extension PlanetarySystemViewController {
+    func configUI() {
+        let nib = UINib(nibName: cellId, bundle: .main)
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: view.frame.size.width , height: view.frame.size.height / 8)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView?.backgroundColor = .white
+
+        collectionView?.register(nib, forCellWithReuseIdentifier: cellId)
+        view.addSubview(collectionView!)
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+    }
+}
+
+
+
+extension PlanetarySystemViewController: ReloadDataDelegate, DeleteDataDelegate {
     func reloadData(component: Compose?) {
-        if let component = component {
-            if planetViewController?.planetId == component.id {
-                planetViewController?.showAlert()
-            }
-        }
-        DispatchQueue.main.async {
-            self.collectionView?.reloadData()
-        }
+        self.collectionView?.reloadData()
     }
     
-    
-    
-    
+    func deleteData(deletedComponent: Compose) {
+        if  deletedComponent.id == planetViewController?.component?.id {
+                self.planetViewController?.showAlert()
+            }
+        }
 }
 
 
 extension PlanetarySystemViewController {
     
-    func appendNewCell(compenent: Compose) {
-        print("Нові дані")
-            self.collectionView?.performBatchUpdates({
-                let indexPath = IndexPath(row: self.planetarySystems.count, section: 0)
-                self.planetarySystems.append(compenent)
-                //add your object to data source first
-                self.collectionView?.insertItems(at: [indexPath])
-            }, completion: nil)
-        
-    }
-    
-    
-    
     func showAlert() {
-
         let alert = UIAlertController (title: "Go back", message: "Maybe, Galaxy is collided or was created Black Hole", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler:{ [weak self] (alertOKAction) in
             self?.popThisView()
@@ -120,3 +110,5 @@ extension PlanetarySystemViewController {
     
 
 }
+
+

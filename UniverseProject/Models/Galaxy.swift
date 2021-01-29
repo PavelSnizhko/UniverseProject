@@ -21,11 +21,18 @@ class Galaxy {
         case spiral
     }
     
-    var id: UUID
+    private(set) var id: UUID
     private(set) var type: GalaxyType
     private(set) var age: Int = 0
     private(set) var weight: Int = 0
-    private(set) var componentsDict: [UUID:Compose] = [:]
+    private(set) var componentsDict: [UUID:Compose] = [:] {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadDelegate?.reloadData(component: nil)
+
+            }
+        }
+    }
     private weak var delegate: GenerateViaDelegateProtocolPlanetarySystem?
     private weak var appendBlackHole: GenerateViaDelegateProtocolBlackHole?
     weak var deleteDelegate: DeleteDataDelegate?
@@ -74,12 +81,10 @@ class Galaxy {
                 //TODO if it's work well show alert if it deleted...?
                     
                 if let planetarySystem = newDict.removeValue(forKey: id) {
+                    
                     self.deleteDelegate?.deleteData(deletedComponent: planetarySystem)
-                    print("\(String(describing: planetarySystem.id)) ВИДАЛЕНА ")
+//                    print("\(String(describing: planetarySystem.id)) ВИДАЛЕНА ")
                 }
-                //TODO clean this
-//                planetarySystem?.reloadDelegate?.reloadData(component: planetarySystem)
-               
             }
         
         }
@@ -112,13 +117,11 @@ extension Galaxy: Comparable, Compose {
         
         if let planetarySystem = delegate?.generatePlanetarySystem(galaxyDelegat: self) {
             componentsDict[planetarySystem.id] = planetarySystem
-//            DispatchQueue.main.async { [weak self] in
-            self.reloadDelegate?.reloadData(component: planetarySystem)
-//            }
-            print("Planetary system \(planetarySystem.id) is added ")
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadDelegate?.reloadData(component: planetarySystem)
+            }
+//            print("Planetary system \(planetarySystem.id) is added ")
         }
-       
-        
         self.reloadDelegate?.reloadData(component: nil)
         
     }
@@ -133,7 +136,7 @@ extension Galaxy: Comparable, Compose {
     
     
     func showContent() -> String {
-        return "Age: \(age)" + "Type: \(type)" + "Count of Planetary System \(componentsDict.count)"
+        return "Age: \(age)" + "\t Type: \(type)" + " \t Count of Planetary System \(componentsDict.count)"
     }
     
     func smallDescription() -> String {
@@ -149,15 +152,20 @@ extension Galaxy: Hashable {
 }
 
 
+//TODO Викликати знищення галактики якщо зіткнення
+
+
+
 extension Galaxy: DestroyPlanetarySystem {
-    
     // To have posibility in future acces by id to black hole I should not save under planetary system id but under blackHol's
     func destroyPlanetarySystem(id: UUID, blackHole: BlackHole) {
-        print("Зараз буде знищення цілої планетної системи в Галактиці \(self.componentsDict[id])")
+        print("Зараз буде знищення цілої планетної системи в Галактиці \(self.componentsDict.values)")
         self.componentsDict[blackHole.id] = blackHole
-        guard let component = self.componentsDict.removeValue(forKey: id)else { return }
-        self.deleteDelegate?.deleteData(deletedComponent: component)
+        self.componentsDict.removeValue(forKey: id)
+        self.deleteDelegate?.deleteData(deletedComponent: self)
         print( "Має відкинути назад якщо у галактиці \(self.id)")
+        print("Відбулося знищення цілої планетної системи в Галактиці \(self.componentsDict.values)")
+
     }
     
     

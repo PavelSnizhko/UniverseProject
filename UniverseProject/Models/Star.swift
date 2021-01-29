@@ -42,7 +42,14 @@ class Star {
     private(set) var radius: Int
     private var evolutionStage: EvolutionStage
     private weak var blackHoleDelegate: PosibleBlackHole?
-    private (set) var componentsDict: [UUID: Compose] = [:]
+    private (set) var componentsDict: [UUID: Compose] = [:] {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.reloadDelegate?.reloadData(component: nil)
+
+            }
+        }
+    }
     weak var reloadDelegate: ReloadDataDelegate?
     
     
@@ -128,7 +135,7 @@ class BlackHole: Compose {
     }
     
     func showContent() -> String {
-        return "\(id)" +  "\(weight) " + "\(radius)"
+        return "\(id) \t" +  "\(weight) \t" + "\(radius) \t"
     }
     
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {

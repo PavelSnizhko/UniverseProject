@@ -11,27 +11,18 @@ private let reuseIdentifier = "Cell"
 
 class PlanetViewController: UIViewController {
     
-    var planetId: UUID?
-    var planets: [Compose] = []
+    var planetaryId: UUID?
+    weak var component: Compose?
+    var planets: [Compose] {
+        component?.getComponents() ?? []
+    }
 //    var planetaryKeys: [UUID]?
     let cellId = String(describing: CollectionViewCell.self)
     var collectionView: UICollectionView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nib = UINib(nibName: cellId, bundle: .main)
-//        self.planetaryKeys = Array(planetarySystems.keys)
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: view.frame.size.width , height: view.frame.size.height / 8)
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView?.backgroundColor = .white
-
-        collectionView?.register(nib, forCellWithReuseIdentifier: cellId)
-        view.addSubview(collectionView!)
-        collectionView?.delegate = self
-        collectionView?.dataSource = self
+        configUI()
     }
     
     override func viewDidLayoutSubviews() {
@@ -57,12 +48,33 @@ extension PlanetViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 }
 
+
+private extension PlanetViewController {
+    func configUI() {
+        let nib = UINib(nibName: cellId, bundle: .main)
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: view.frame.size.width , height: view.frame.size.height / 8)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView?.backgroundColor = .white
+
+        collectionView?.register(nib, forCellWithReuseIdentifier: cellId)
+        view.addSubview(collectionView!)
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
+    }
+}
+
+
+
+
 extension PlanetViewController: ReloadDataDelegate {
     func reloadData(component: Compose?) {
-        //TODO maybe make this self.collectionView?.reloadItems(at: collectionView?.indexPathsForVisibleItems)
         self.collectionView?.reloadData()
     }
 }
+
 
 extension PlanetViewController {
     func showAlert() {
