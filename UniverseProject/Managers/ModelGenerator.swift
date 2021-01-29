@@ -8,8 +8,10 @@
 import Foundation
 
 
+
 class ModelGenerator: PowerModelGenerator {
- 
+    
+//    weak var controlerVCDelegates: controlerVCDelegates?
     
     func generateBlackHole(star: Star) -> BlackHole {
         return BlackHole(id: star.id, weight: star.weight, radius: star.radius)
@@ -29,13 +31,13 @@ class ModelGenerator: PowerModelGenerator {
         return Planet(weight: Int.random(in: 0..<100), satelliteArray: generateStatelite(), type: type, delegate: self, id: UUID())
     }
 
-    func generateStatelite() -> [String:Compose] {
+    func generateStatelite() -> [UUID:Compose] {
 //        print("Was created new statelites")
-        var statelites: [String:Compose] = [:]
+        var statelites: [UUID:Compose] = [:]
         for _ in 0..<(Int.random(in: 0..<6)) {
             let type = Planet.PlanetType.allCases.randomElement()!
             let statelite = Planet(weight: Int.random(in: 0..<100), satelliteArray: [:], type: type, delegate: nil, id: UUID())
-            statelites[statelite.id.uuidString] = statelite
+            statelites[statelite.id] = statelite
         }
         return statelites
     }
@@ -47,8 +49,8 @@ class ModelGenerator: PowerModelGenerator {
     }
 
     
-    func createUniverse() -> Compose {
-        let universe = Universe(id: UUID(), delegate: self, timePeriod: 10, universeRule: UniverseRule(radiusBoundary: 50, weightBoundary: 50))
+    func createUniverse(reloadDataDelegate: ReloadDataDelegate?) -> Compose {
+        let universe = Universe(id: UUID(), delegate: self, timePeriod: 10, universeRule: UniverseRule(radiusBoundary: 50, weightBoundary: 50),  reloadDataDelegate: reloadDataDelegate)
         return universe
     }
     

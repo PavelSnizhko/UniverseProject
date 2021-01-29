@@ -9,7 +9,7 @@ import Foundation
 
 
 protocol DestroyPlanetarySystem: class {
-    func destroyPlanetarySystem(id: String, blackHole: BlackHole)
+    func destroyPlanetarySystem(id: UUID, blackHole: BlackHole)
 }
 
 typealias GenerateViaDelegateNewComponent = GenerateViaDelegateProtocolPlanet & GenerateViaDelegateProtocolBlackHole
@@ -20,10 +20,12 @@ class PlanetarySystem: Compose, PosibleBlackHole {
     // contentArray naming due to there can be diff objects some commets for example
     var id: UUID
     var age: Int = 0
-    var star: Compose?
-    var contentArray: [String:Compose] = [:]
+    private(set) var star: Compose?
+    private(set) var componentsDict: [UUID:Compose] = [:]
     weak var delegateModelGenerator: GenerateViaDelegateNewComponent?
     weak var delegateDestroyPlanetarySystem: DestroyPlanetarySystem?
+    weak var reloadDelegate: ReloadDataDelegate?
+
 
     
     init(id: UUID, delegateModelGenerator: ModelGenerator, delegateDestroyPlanetarySystem: Galaxy, mainStar: Star) {
@@ -34,37 +36,45 @@ class PlanetarySystem: Compose, PosibleBlackHole {
     }
     
     func smallDescription() -> String {
-        return id.uuidString
+        return "\(id.uuidString)"
     }
     
     func showContent() -> String {
-        return id.uuidString
+        guard let star = star else { return " The system is died"  }
+        return "Host star \(star.id) Counts of planets \(componentsDict.count)"
     }
     
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
         self.age += timeInterval
-        if self.age % 10 == 0 && contentArray.count < 9 {
+        if self.age % 10 == 0 && componentsDict.count < 9 {
             if let component = self.delegateModelGenerator?.generatePlanet() {
-                contentArray[component.id.uuidString] = component
+                componentsDict[component.id] = component
             }
         }
-        print("sssssssUUUUUUUUUUUUUUUUUUU")
+        self.reloadDelegate?.reloadData(component: nil)
         self.star?.handleTimePeriod(timeInterval: timeInterval, universeRule: universeRule)
     }
     
     
     func countWeight() -> Int {
-        contentArray.values.reduce(star?.countWeight() ?? 0, { $0 + $1.countWeight()})
+        componentsDict.values.reduce(star?.countWeight() ?? 0, { $0 + $1.countWeight()})
     }
     
     func changeStarToBlackHole(star: Star) {
         guard let blackHole = self.delegateModelGenerator?.generateBlackHole(star: star) else { return }
         print("Black Hole" + blackHole.id.uuidString)
         self.star = blackHole
-        delegateDestroyPlanetarySystem?.destroyPlanetarySystem(id: self.id.uuidString, blackHole: blackHole )
+        delegateDestroyPlanetarySystem?.destroyPlanetarySystem(id: self.id, blackHole: blackHole )
         print(" Black hole transparent to Galaxy")
     }
     
     
+    deinit {
+        print("_______Видалена планетарна система______")
+    }
+    
 }
+
+
+
 

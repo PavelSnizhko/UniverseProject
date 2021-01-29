@@ -20,27 +20,34 @@ class Planet {
     private(set) var type: PlanetType
     private(set) var weight: Int
     private(set) var age: Int = 0
-    private(set) var contentArray: [String:Compose] = [:]
+    private(set) var componentsDict: [UUID : Compose] = [:]
+    weak var reloadDelegate: ReloadDataDelegate?
+
     
     //массив для супутников
     private var statelArray: [Compose] = []
     
-    init(weight: Int, satelliteArray: [String:Compose], type: PlanetType, delegate: GenerateViaDelegateProtocolSatellite?, id: UUID) {
+    init(weight: Int, satelliteArray: [UUID:Compose], type: PlanetType, delegate: GenerateViaDelegateProtocolSatellite?, id: UUID) {
         self.id = id
         self.weight = weight
-        self.contentArray = satelliteArray
+        self.componentsDict = satelliteArray
         self.type = type
         self.delegate = delegate
 //        self.delegate = delegate
     }
     
+    
+    deinit {
+        print("Планета \(id) видалена")
+    }
    
 
 }
 
 extension Planet: Compose {
+    
     func countWeight() -> Int {
-        return contentArray.values.reduce(0, { $0 + $1.countWeight() } )
+        return componentsDict.values.reduce(0, { $0 + $1.countWeight() } )
     }
     
 

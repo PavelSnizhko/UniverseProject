@@ -9,7 +9,7 @@ import UIKit
 
 
 protocol ReloadDataDelegate: class {
-    func reloadData(component: Compose)
+    func reloadData(component: Compose?)
 }
 
 
@@ -17,31 +17,18 @@ class UniverseViewController: UIViewController {
     
     var modelGenerator = ModelGenerator()
     var universe: Compose?
-//    var data = [("Pasha", "1234567"), ("Dasha", "534534"), ("Sasha", "142343267")]
     let cellId = String(describing: CollectionViewCell.self)
     weak var timer: Timer?
-    
+    weak var galaxyViewController: GalaxyViewController?
+
     var collectionView: UICollectionView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nib = UINib(nibName: cellId, bundle: .main)
         
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .vertical
-        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: view.frame.size.width , height: view.frame.size.height / 8)
-        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView?.backgroundColor = .white
+        configUICollectionView(cellId: cellId)
+        self.universe = self.modelGenerator.createUniverse(reloadDataDelegate: self)
 
-        collectionView?.register(nib, forCellWithReuseIdentifier: cellId)
-        view.addSubview(collectionView!)
-        collectionView?.delegate = self
-        collectionView?.dataSource = self
-        self.universe = self.modelGenerator.createUniverse()
-//        createTimer()
-//        self.collectionView.reloadData()
-       // Do any additional setup after loading the view.
     }
     
     override func viewDidLayoutSubviews() {
@@ -60,10 +47,8 @@ extension UniverseViewController: UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let myCell = cell as? CollectionViewCell else { return }
-        let element = self.universe!
-        myCell.name = "\(element.id)"
-        myCell.descriptionItem = "\(element.smallDescription())"
+        guard let myCell = cell as? CollectionViewCell, let component = self.universe else { return }
+        myCell.update(component: component)
     }
     
     
@@ -71,20 +56,50 @@ extension UniverseViewController: UICollectionViewDelegate, UICollectionViewData
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let universe = self.universe as? Universe {
             let galaxyVC = storyboard?.instantiateViewController(withIdentifier: "GalaxyViewController") as! GalaxyViewController
-//            present(sb, animated: true, completion: nil)?
-            galaxyVC.galaxies = universe.contentArray
+            galaxyViewController = galaxyVC
+            
+            //            present(sb, animated: true, completion: nil)?
+            galaxyVC.galaxies = universe.getComponents()
             navigationController?.pushViewController(galaxyVC, animated: true)
+        }
+    }
+}
+
+extension UniverseViewController: ReloadDataDelegate {
+    func reloadData(component: Compose?) {
+        //change using delegate maybe?
+        if let component = component {
+            galaxyViewController?.appendNewCell(compenent: component)
+            print("Я ДОБАВЛЯЛ ЧЕСТНО !!!!")
+            print(galaxyViewController)
+        }
+     
+        DispatchQueue.main.async { [weak self] in
+            self?.collectionView?.reloadData()
         }
     }
     
     
+    
 }
 
-extension UniverseViewController: ReloadDataDelegate {
-    func reloadData(component: Compose) {
+
+
+extension UniverseViewController {
+    func configUICollectionView(cellId: String) {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        layout.itemSize = CGSize(width: view.frame.size.width , height: view.frame.size.height / 8)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView?.backgroundColor = .white
+        let nib = UINib(nibName: cellId, bundle: .main)
+        collectionView?.register(nib, forCellWithReuseIdentifier: cellId)
+        view.addSubview(collectionView!)
         
+        collectionView?.delegate = self
+        collectionView?.dataSource = self
     }
-    
     
 }
 
