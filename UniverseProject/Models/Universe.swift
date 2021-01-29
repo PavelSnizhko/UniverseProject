@@ -27,7 +27,7 @@ class Universe: Compose {
         self.id = id
         self.delegate = delegate
         self.universeRule = universeRule
-        self.timer = Timer(timeInterval: 2, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
+        self.timer = Timer(timeInterval: 10, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
         self.reloadDelegate = reloadDataDelegate
         if let timer = timer {
             RunLoop.current.add(timer, forMode: .common)
@@ -49,8 +49,7 @@ extension Universe{
     }
     
     @objc func updateTimer(timeInterval: Int) {
-        //TODO: Create new queue
-//        let universeQueue = DispatchQueue(label: "", qos: .default, attributes: ., autoreleaseFrequency: ., target: <#T##DispatchQueue?#>)
+
         handleTimePeriod(timeInterval: 10, universeRule: self.universeRule)
     }
     
