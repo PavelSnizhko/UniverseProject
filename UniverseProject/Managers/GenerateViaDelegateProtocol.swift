@@ -25,7 +25,7 @@ protocol GenerateViaDelegateProtocolPlanet: class {
 }
 
 protocol GenerateViaDelegateProtocolSatellite: class {
-    func generateStatelite() -> [String:Compose]
+    func generateStatelite() -> [UUID: Compose]
 }
 
 protocol GenerateViaDelegateProtocolBlackHole: class {

@@ -46,18 +46,9 @@ class CollectionViewCell: UICollectionViewCell {
         descriptionItem = nil
     }
     
-//    private func setState() {
-//      guard let task = task else {
-//        return
-//      }
-//
-//      if task.completed {
-//        taskLabel.attributedText = NSAttributedString(string: task.name,
-//          attributes: [.strikethroughStyle: 1])
-//      } else {
-//        taskLabel.attributedText = NSAttributedString(string: task.name,
-//          attributes: nil)
-//      }
-//    }
-    
+    func update(component: Compose) {
+        self.name = component.smallDescription()
+        self.descriptionItem = component.showContent()
+    }
+        
 }

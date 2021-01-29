@@ -15,7 +15,7 @@ protocol PosibleBlackHole: class {
 
 class Star {
     /*
-     There is used content array because around star can be rotated not only planet also some asteroids and comets.If we want to expend It will be very usefull
+     There is used componentsDict because around star can be rotated not only planet also some asteroids and comets.If we want to expend It will be very usefull
     */
     enum StarType: String, CaseIterable {
         case brownDwarfStar
@@ -42,6 +42,8 @@ class Star {
     private(set) var radius: Int
     private var evolutionStage: EvolutionStage
     private weak var blackHoleDelegate: PosibleBlackHole?
+    private (set) var componentsDict: [UUID: Compose] = [:]
+    weak var reloadDelegate: ReloadDataDelegate?
     
     
     init(id: UUID, weight: Int, type: StarType, temeperature: Int, luminosity: Int, radius: Int) {
@@ -100,6 +102,23 @@ extension Star: Compose {
 
 
 class BlackHole: Compose {
+    private(set) var id: UUID
+    private(set) var age: Int = 0
+    let radius: Int
+    let weight: Int
+    weak var reloadDelegate: ReloadDataDelegate?
+    private(set) var componentsDict: [UUID : Compose] = [:]
+
+    
+    init(id: UUID, weight: Int, radius: Int) {
+        self.id = id
+        self.weight = weight
+        self.radius = radius
+        print(".............BlackHole is created..................................")
+    }
+    
+    
+    
     func countWeight() -> Int {
         self.weight
     }
@@ -117,15 +136,5 @@ class BlackHole: Compose {
         print("Добавився час в Чорній дирі")
     }
     
-    var id: UUID
-    private(set) var age: Int = 0
-    let radius: Int
-    let weight: Int
-    
-    init(id: UUID, weight: Int, radius: Int) {
-        self.id = id
-        self.weight = weight
-        self.radius = radius
-    }
-    
+   
 }
