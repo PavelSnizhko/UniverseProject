@@ -20,31 +20,26 @@ class Planet {
     private(set) var type: PlanetType
     private(set) var weight: Int
     private(set) var age: Int = 0
-    private(set) var componentsDict: [UUID : Compose] = [:] {
-        didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.reloadDelegate?.reloadData(component: nil)
-
-            }
-        }
-    }
+    private(set) var componentsDict: [UUID : Compose] = [:]
     weak var reloadDelegate: ReloadDataDelegate?
-    private var statelArray: [Compose] = []
-    
-    init(weight: Int, satelliteArray: [UUID:Compose], type: PlanetType, delegate: GenerateViaDelegateProtocolSatellite?, id: UUID) {
+        
+    init(weight: Int, componentsDict: [UUID:Compose], type: PlanetType, delegate: GenerateViaDelegateProtocolSatellite?, id: UUID) {
         self.id = id
         self.weight = weight
-        self.componentsDict = satelliteArray
+        self.componentsDict = componentsDict
         self.type = type
         self.delegate = delegate
     }
     
     
     deinit {
-        print("Планета \(id) видалена")
+        if componentsDict.isEmpty {
+            print("Was deleted statelite")
+        }
+        else {
+            print("Was deleted statelite planet")
+        }
     }
-   
-
 }
 
 extension Planet: Compose {
@@ -61,13 +56,15 @@ extension Planet: Compose {
     }
     
     func showContent() -> String {
-        //TODO create prety show content
-        return  id.uuidString + "\t" + type.rawValue
+        if componentsDict.isEmpty {
+            return " \n Statelite \(id.uuidString + "\t" + type.rawValue + "\n") "
+        }
+        return "Planet \(id.uuidString ) has  " + componentsDict.values.reduce(" ", { result, component -> String in
+            result + component.showContent()
+        })
     }
     
     func smallDescription() -> String {
         return id.uuidString + "\t" + type.rawValue
     }
-    
-    
 }

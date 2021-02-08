@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE256CEF25CEB48B00443AC9 /* PlanetarySystemViewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE256CED25CEB48900443AC9 /* PlanetarySystemViewCollectionViewCell.swift */; };
+		AE256CF025CEB48B00443AC9 /* PlanetarySystemViewCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE256CEE25CEB48A00443AC9 /* PlanetarySystemViewCollectionViewCell.xib */; };
+		AE256CF425CF043D00443AC9 /* BlackHoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE256CF225CF043B00443AC9 /* BlackHoleCollectionViewCell.swift */; };
+		AE256CF525CF043D00443AC9 /* BlackHoleCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE256CF325CF043B00443AC9 /* BlackHoleCollectionViewCell.xib */; };
 		AE7FAB9825C04D8800D4E66F /* PlanetarySystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7FAB9725C04D8800D4E66F /* PlanetarySystem.swift */; };
 		AE7FABC225C2E62A00D4E66F /* PlanetarySystemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7FABC125C2E62900D4E66F /* PlanetarySystemViewController.swift */; };
 		AE7FABCA25C2F56300D4E66F /* PlanetaryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE7FABC825C2F56300D4E66F /* PlanetaryViewCell.swift */; };
@@ -31,6 +35,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE256CED25CEB48900443AC9 /* PlanetarySystemViewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetarySystemViewCollectionViewCell.swift; sourceTree = "<group>"; };
+		AE256CEE25CEB48A00443AC9 /* PlanetarySystemViewCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlanetarySystemViewCollectionViewCell.xib; sourceTree = "<group>"; };
+		AE256CF225CF043B00443AC9 /* BlackHoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHoleCollectionViewCell.swift; sourceTree = "<group>"; };
+		AE256CF325CF043B00443AC9 /* BlackHoleCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BlackHoleCollectionViewCell.xib; sourceTree = "<group>"; };
 		AE7FAB9725C04D8800D4E66F /* PlanetarySystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetarySystem.swift; sourceTree = "<group>"; };
 		AE7FABC125C2E62900D4E66F /* PlanetarySystemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PlanetarySystemViewController.swift; path = UniverseProject/Views/PlanetarySystemViewController.swift; sourceTree = SOURCE_ROOT; };
 		AE7FABC825C2F56300D4E66F /* PlanetaryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetaryViewCell.swift; sourceTree = "<group>"; };
@@ -140,6 +148,10 @@
 				AEC5377225B9789D00BDE7A0 /* CollectionViewCell.xib */,
 				AE7FABC825C2F56300D4E66F /* PlanetaryViewCell.swift */,
 				AE7FABC925C2F56300D4E66F /* PlanetaryViewCell.xib */,
+				AE256CED25CEB48900443AC9 /* PlanetarySystemViewCollectionViewCell.swift */,
+				AE256CEE25CEB48A00443AC9 /* PlanetarySystemViewCollectionViewCell.xib */,
+				AE256CF225CF043B00443AC9 /* BlackHoleCollectionViewCell.swift */,
+				AE256CF325CF043B00443AC9 /* BlackHoleCollectionViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -202,10 +214,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				AEC5376525B96AAF00BDE7A0 /* LaunchScreen.storyboard in Resources */,
+				AE256CF525CF043D00443AC9 /* BlackHoleCollectionViewCell.xib in Resources */,
 				AE7FABCB25C2F56300D4E66F /* PlanetaryViewCell.xib in Resources */,
 				AEC5376225B96AAF00BDE7A0 /* Assets.xcassets in Resources */,
 				AEC5377425B9789D00BDE7A0 /* CollectionViewCell.xib in Resources */,
 				AEC5376025B96AA800BDE7A0 /* Main.storyboard in Resources */,
+				AE256CF025CEB48B00443AC9 /* PlanetarySystemViewCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,7 +232,9 @@
 			files = (
 				AEC537CB25BB66CD00BDE7A0 /* PlanetViewController.swift in Sources */,
 				AEC5378125B9DD3900BDE7A0 /* Star.swift in Sources */,
+				AE256CEF25CEB48B00443AC9 /* PlanetarySystemViewCollectionViewCell.swift in Sources */,
 				AEC5378A25B9DDCA00BDE7A0 /* ModelGenerator.swift in Sources */,
+				AE256CF425CF043D00443AC9 /* BlackHoleCollectionViewCell.swift in Sources */,
 				AE7FABC225C2E62A00D4E66F /* PlanetarySystemViewController.swift in Sources */,
 				AEC5377325B9789D00BDE7A0 /* CollectionViewCell.swift in Sources */,
 				AEC5379225B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift in Sources */,

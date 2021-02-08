@@ -8,27 +8,35 @@
 import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
-
-    @IBOutlet private weak var nameLabel: UILabel!
-    @IBOutlet private weak var descriptionLabel: UILabel!
+    
+    @IBOutlet private weak var idLabel: UILabel!
+    @IBOutlet private weak var typeLabel: UILabel!
+    
+    @IBOutlet private weak var weightLabel: UILabel!
+    @IBOutlet private weak var planetarySystemsCount: UILabel!
     
     
-    
-    var name: String? {
-        get {
-            nameLabel.text
-        }
-        set {
-            nameLabel.text = newValue
-        }
-    }
-    
-    var descriptionItem: String? {
-        get {
-            descriptionLabel.text
-        }
-        set {
-            descriptionLabel.text = newValue
+    var component: Compose? {
+        didSet {
+            if let galaxy = component as? Galaxy {
+                idLabel.text = galaxy.id.uuidString
+                typeLabel.text = galaxy.type.rawValue
+                weightLabel.text = String(galaxy.countWeight())
+                planetarySystemsCount.text = String(galaxy.componentsDict.count)
+            }
+            else if let universe = component as? Universe {
+                idLabel.text = universe.id.uuidString
+                typeLabel.text = "Universe"
+                weightLabel.text = String(universe.countWeight())
+                planetarySystemsCount.text = String(universe.componentsDict.count)
+            }
+            else {
+                // maybe it is stupid or useful for prepareForReuse func 
+                idLabel.text = nil
+                typeLabel.text = nil
+                weightLabel.text = nil
+                planetarySystemsCount.text = nil
+            }
         }
     }
     
@@ -42,13 +50,18 @@ class CollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        name = nil
-        descriptionItem = nil
+        component = nil
     }
     
-    func update(component: Compose) {
-        self.name = component.smallDescription()
-        self.descriptionItem = component.showContent()
-    }
+    
+    
+    
+//    func update(component: Compose) {
+//        self.name = component.smallDescription()
+//        self.descriptionItem = component.showContent()
+//        if let component = component as? Planet {
+//            print(component.showContent())
+//        }
+//    }
         
 }

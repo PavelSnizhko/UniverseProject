@@ -15,7 +15,7 @@ class Galaxy {
     /*
     There is used contentArray because if in our galaxy will be something another than Planet system it would be useful also it's smth like open close princeple
     */
-    enum GalaxyType: CaseIterable {
+    enum GalaxyType: String, CaseIterable {
         case eliptical
         case irregular
         case spiral
@@ -25,14 +25,7 @@ class Galaxy {
     private(set) var type: GalaxyType
     private(set) var age: Int = 0
     private(set) var weight: Int = 0
-    private(set) var componentsDict: [UUID:Compose] = [:] {
-        didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.reloadDelegate?.reloadData(component: nil)
-
-            }
-        }
-    }
+    private(set) var componentsDict: [UUID:Compose] = [:]
     private weak var delegate: GenerateViaDelegateProtocolPlanetarySystem?
     private weak var appendBlackHole: GenerateViaDelegateProtocolBlackHole?
     weak var deleteDelegate: DeleteDataDelegate?
@@ -46,6 +39,7 @@ class Galaxy {
         self.type = type
         self.age = age
         self.delegate = delegate
+        print("Galaxy is just created")
     }
     
     init(id: UUID, type: GalaxyType, age: Int = 0, delegate: GenerateViaDelegateProtocolPlanetarySystem?, contentArray: [UUID:Compose]) {
@@ -54,6 +48,8 @@ class Galaxy {
         self.age = age
         self.delegate = delegate
         self.componentsDict = contentArray
+        print("Galaxy is created due to was COLISION")
+
     }
     
     
@@ -78,12 +74,8 @@ class Galaxy {
         let numberElemetsForDestroying = Int(Double(newDict.count) * 0.1)
         for _ in 0..<numberElemetsForDestroying {
             if let id = newDict.keys.randomElement() {
-                //TODO if it's work well show alert if it deleted...?
-                    
                 if let planetarySystem = newDict.removeValue(forKey: id) {
-                    
-                    self.deleteDelegate?.deleteData(deletedComponent: planetarySystem)
-//                    print("\(String(describing: planetarySystem.id)) ВИДАЛЕНА ")
+                    self.deleteDelegate?.deleteData(from: self, planetarySystem: planetarySystem)
                 }
             }
         
@@ -117,11 +109,9 @@ extension Galaxy: Comparable, Compose {
         
         if let planetarySystem = delegate?.generatePlanetarySystem(galaxyDelegat: self) {
             componentsDict[planetarySystem.id] = planetarySystem
-            DispatchQueue.main.async { [weak self] in
-                self?.reloadDelegate?.reloadData(component: planetarySystem)
-            }
-//            print("Planetary system \(planetarySystem.id) is added ")
+            self.reloadDelegate?.reloadData(component: planetarySystem)
         }
+        //to inform age changes or don't use it? 
         self.reloadDelegate?.reloadData(component: nil)
         
     }
@@ -159,14 +149,24 @@ extension Galaxy: Hashable {
 extension Galaxy: DestroyPlanetarySystem {
     // To have posibility in future acces by id to black hole I should not save under planetary system id but under blackHol's
     func destroyPlanetarySystem(id: UUID, blackHole: BlackHole) {
-        print("Зараз буде знищення цілої планетної системи в Галактиці \(self.componentsDict.values)")
+//        print("Зараз буде знищення цілої планетної системи в Галактиці \(self.componentsDict.values)")
         self.componentsDict[blackHole.id] = blackHole
-        self.componentsDict.removeValue(forKey: id)
-        self.deleteDelegate?.deleteData(deletedComponent: self)
-        print( "Має відкинути назад якщо у галактиці \(self.id)")
-        print("Відбулося знищення цілої планетної системи в Галактиці \(self.componentsDict.values)")
+        self.reloadDelegate?.reloadData(component: blackHole)
+        let planetarySystem =  self.componentsDict.removeValue(forKey: id)
+        self.deleteDelegate?.deleteData(from: self, planetarySystem: planetarySystem)
+        //comment this method because it is not good call and it will thow from list of planetaries to root
+
+        //        self.deleteDelegate?.deleteData(from: self)
+        
+        
+        //        print( "Має відкинути назад якщо у галактиці \(self.id)")
+//        print("Відбулося знищення цілої планетної системи в Галактиці \(self.componentsDict.values)")
 
     }
     
     
 }
+
+
+
+

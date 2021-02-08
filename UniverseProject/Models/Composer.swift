@@ -17,11 +17,9 @@ protocol Compose: class {
     var componentsDict: [UUID: Compose] { get }
     var reloadDelegate: ReloadDataDelegate? { get set }
     func countWeight() -> Int
-    func smallDescription() -> String
-    func showContent() -> String
+    func smallDescription() -> [String: String]
+    func showContent() -> [String: String]
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule)
-    
-    
 }
 
 
@@ -29,5 +27,14 @@ extension Compose {
     func getComponents () -> [Compose] {
         return componentsDict.values.sorted { $0.age > $1.age }
     }
+        
+    
 }
+
+func ==(lhs: Compose, rhs: Compose) -> Bool {
+    guard type(of: lhs) == type(of: rhs) else { return false }
+    return lhs.id == rhs.id
+}
+
+
 

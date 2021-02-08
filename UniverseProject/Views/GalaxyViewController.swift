@@ -9,21 +9,28 @@ import UIKit
 
 
 protocol DeleteDataDelegate: class {
-    func deleteData(deletedComponent: Compose)
+    //gonna delete data from galaxy it will be planetary system
+    func deleteData(from component: Compose, planetarySystem: Compose?)
 }
 
+
+protocol DeleteComponentsDelegate: class {
+    func deleteComponents(from component: Compose, components: (Compose, Compose))
+}
+
+
+//TODO: реалізація сповіщенян про додавання новго елемента завдяки делегату а lazy var щоб отримати данні
+
+// Think abo
 
 class GalaxyViewController: UIViewController {
 
     weak var planetarySystemVC: PlanetarySystemViewController?
     weak var component: Compose?
-    var galaxies: [Compose] {
-        self.component?.getComponents() ?? []
-
-    }
+    private var galaxies: [Compose] = []
     let cellId = String(describing: CollectionViewCell.self)
-    var galaxyKeys: [UUID] = []
-    var collectionView: UICollectionView?
+    private var galaxyKeys: [UUID] = []
+    private var collectionView: UICollectionView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,36 +39,51 @@ class GalaxyViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         collectionView?.frame = view.bounds
+       
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // set to nil when was invoked navigation controller and came on this view
+        planetarySystemVC = nil
+        initDataSourceArray()
+    }
+    
+    func initDataSourceArray() {
+        guard let components = self.component?.getComponents() else { return }
+        self.galaxies = components
+
+    }
+    
 }
 
 extension GalaxyViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(" Was here ")
         return galaxies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         return collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
-
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let myCell = cell as? CollectionViewCell else { return }
         guard let galaxy = self.galaxies[indexPath.row] as? Galaxy else { return }
-        myCell.update(component: galaxy)
+        myCell.component = galaxy
     }
 
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         planetarySystemVC = storyboard?.instantiateViewController(withIdentifier: "PlanetarySystemViewController") as? PlanetarySystemViewController
         guard let galaxy = self.galaxies[indexPath.row] as? Galaxy else { return }
-        galaxy.reloadDelegate = self
-        galaxy.deleteDelegate = self
+        
 //        planetarySystemVC?.planetarySystems = galaxy.getComponents()
         guard let planetarySystemVC = planetarySystemVC else { return }
         planetarySystemVC.component = galaxy
+        galaxy.reloadDelegate = planetarySystemVC
+        galaxy.deleteDelegate = planetarySystemVC
         
         navigationController?.pushViewController(planetarySystemVC, animated: true)
     }
@@ -71,18 +93,58 @@ extension GalaxyViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
 extension GalaxyViewController: ReloadDataDelegate {
     func reloadData(component: Compose?) {
+        guard let galaxy = component else { self.collectionView?.reloadData(); return }
+//        self.dataSource.update(galaxy)
+        self.galaxies.append(galaxy)
+        // Можливо звідси треба викликати щоб все добре оновлювалось
+        self.planetarySystemVC?.reloadData(component: nil)
         self.collectionView?.reloadData()
     }
 }
     
-extension GalaxyViewController: DeleteDataDelegate {
-    func deleteData(deletedComponent: Compose) {
-        print(" \(deletedComponent.id) == \(planetarySystemVC?.component?.id) ")
-        if  deletedComponent.id == planetarySystemVC?.component?.id {
-            self.planetarySystemVC?.showAlert()
+
+
+
+extension GalaxyViewController: DeleteDataDelegate, DeleteComponentsDelegate {
+
+    //VERY BAD SOLUTION WHAT AM GONNA DO!!!!!!!!!!!!!!!!!!!!!
+    func deleteComponents(from component: Compose, components: (Compose, Compose)) {
+        for (index, galaxy) in galaxies.enumerated() {
+            if components.0 == galaxy || components.1 == galaxy {
+                // scenario if I view planetViewController
+                if galaxy.id == planetarySystemVC?.component?.id {
+                    self.planetarySystemVC?.showAlert()
+                }
+                print("зараз видалю -()-" + galaxy.id.uuidString)
+                
+                self.galaxies.remove(at: index)
+                let indexPath = IndexPath(row: index, section: 0)
+
+                self.collectionView?.performBatchUpdates({
+                    self.collectionView?.deleteItems(at: [indexPath])
+                    }) { (finished) in
+//                    self.collectionView?.reloadData()
+                    self.collectionView?.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
+                }
+            }
         }
     }
+    
+    
+    
+    // delete data when BlackHole appears
+    func deleteData(from component: Compose, planetarySystem: Compose?) {
+        if let planetarySystem = planetarySystem {
+            // this condition for blackHole
+            self.planetarySystemVC?.deletePlanetarySystem(component: planetarySystem)
+        }
+        if  planetarySystem?.id == planetarySystemVC?.component?.id {
+            self.planetarySystemVC?.showAlert()
+        }
+        
+    }
 }
+
     
 
 

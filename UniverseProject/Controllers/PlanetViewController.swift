@@ -13,11 +13,13 @@ class PlanetViewController: UIViewController {
     
     var planetaryId: UUID?
     weak var component: Compose?
-    var planets: [Compose] {
-        component?.getComponents() ?? []
-    }
-//    var planetaryKeys: [UUID]?
-    let cellId = String(describing: CollectionViewCell.self)
+    private var planets: [Compose] = []
+    
+//    {
+//        component?.getComponents() ?? []
+//    }
+
+    let cellId = String(describing: PlanetaryViewCell.self)
     var collectionView: UICollectionView?
 
     override func viewDidLoad() {
@@ -26,9 +28,21 @@ class PlanetViewController: UIViewController {
     }
     
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         collectionView?.frame = view.bounds
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        initDataSourceArray()
+    }
+    
+    func initDataSourceArray() {
+        guard let components = self.component?.getComponents() else { return }
+        self.planets = components
+    }
 }
+
 
 extension PlanetViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout  {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -41,9 +55,9 @@ extension PlanetViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        guard let myCell = cell as? CollectionViewCell else { return }
-        let planet = self.planets[indexPath.row]
-        myCell.update(component: planet)
+        guard let myCell = cell as? PlanetaryViewCell else { return }
+        guard let planet = self.planets[indexPath.row] as? Planet else { return }
+        myCell.planet = planet
     }
 
 }
@@ -71,6 +85,8 @@ private extension PlanetViewController {
 
 extension PlanetViewController: ReloadDataDelegate {
     func reloadData(component: Compose?) {
+        guard let planet = component else { self.collectionView?.reloadData(); return }
+        self.planets.append(planet)
         self.collectionView?.reloadData()
     }
 }

@@ -27,5 +27,31 @@
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "06C47AF1-7AB5-4B0E-92FC-F816E2741AB3"
+            shouldBeEnabled = "Yes"
+            nameForDebugger = "black"
+            condition = "reloadDelegate != nil"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UniverseProject/Models/Galaxy.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "152"
+            endingLineNumber = "152"
+            landmarkName = "destroyPlanetarySystem(id:blackHole:)"
+            landmarkType = "7">
+            <Actions>
+               <BreakpointActionProxy
+                  ActionExtensionID = "Xcode.BreakpointAction.Sound">
+                  <ActionContent
+                     soundName = "Blow">
+                  </ActionContent>
+               </BreakpointActionProxy>
+            </Actions>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

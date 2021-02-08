@@ -27,7 +27,7 @@ class Star {
         case yellowDwarfStar
     }
     
-    private enum EvolutionStage: String {
+    enum EvolutionStage: String {
         case young = "First evolution stage"
         case old = "Second evolution stage"
         case carlic = "Final evolution stage"
@@ -40,16 +40,9 @@ class Star {
     private(set) var tempterature: Int
     private(set) var luminosity: Int
     private(set) var radius: Int
-    private var evolutionStage: EvolutionStage
+    private(set) var evolutionStage: EvolutionStage
     private weak var blackHoleDelegate: PosibleBlackHole?
-    private (set) var componentsDict: [UUID: Compose] = [:] {
-        didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.reloadDelegate?.reloadData(component: nil)
-
-            }
-        }
-    }
+    private (set) var componentsDict: [UUID: Compose] = [:]
     weak var reloadDelegate: ReloadDataDelegate?
     
     
@@ -61,7 +54,12 @@ class Star {
         self.weight = weight
         self.radius = radius
         self.id = id
-//        self.delegate = delegate
+        print(" Star \(id)  will be the black hole \(self.weight > 50 && self.radius > 50 )")
+    }
+    
+    deinit {
+        print("|||____________ Star is deleted |||____________")
+
     }
     
 }
@@ -86,7 +84,7 @@ extension Star: Compose {
             if self.evolutionStage == EvolutionStage.young {
                 self.evolutionStage = EvolutionStage.old
             }
-            else if self.evolutionStage == EvolutionStage.old && self.weight >= universeRule.weightBoundary, self.radius >= universeRule.weightBoundary {
+            else if self.evolutionStage == EvolutionStage.old && self.weight >= universeRule.weightBoundary, self.radius >= universeRule.radiusBoundary {
                 blackHoleDelegate?.changeStarToBlackHole(star: self)
             }
             else {
@@ -105,6 +103,7 @@ extension Star: Compose {
     func smallDescription() -> String {
         return id.uuidString + type.rawValue + "\(self.age)"
     }
+    
 }
 
 
@@ -124,6 +123,10 @@ class BlackHole: Compose {
         print(".............BlackHole is created..................................")
     }
     
+    deinit {
+        print("...........||| BlackHole is delete |||..................................")
+
+    }
     
     
     func countWeight() -> Int {

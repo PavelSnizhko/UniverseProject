@@ -16,7 +16,7 @@ protocol ReloadDataDelegate: class {
 class UniverseViewController: UIViewController {
     
     var modelGenerator = ModelGenerator()
-    var universe: Compose?
+    var universe: Universe?
     let cellId = String(describing: CollectionViewCell.self)
     weak var timer: Timer?
     weak var galaxyViewController: GalaxyViewController?
@@ -27,7 +27,9 @@ class UniverseViewController: UIViewController {
         super.viewDidLoad()
         
         configUICollectionView(cellId: cellId)
-        self.universe = self.modelGenerator.createUniverse(reloadDataDelegate: self)
+        
+        // change cast it was for working checking
+        self.universe = self.modelGenerator.createUniverse(reloadDataDelegate: self) as? Universe
 
     }
     
@@ -48,26 +50,31 @@ extension UniverseViewController: UICollectionViewDelegate, UICollectionViewData
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let myCell = cell as? CollectionViewCell, let component = self.universe else { return }
-        myCell.update(component: component)
+        myCell.component = component
     }
     
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let universe = self.universe as? Universe {
+//        if let universe = self.universe as? Universe {
             let galaxyVC = storyboard?.instantiateViewController(withIdentifier: "GalaxyViewController") as! GalaxyViewController
             galaxyViewController = galaxyVC
             galaxyVC.component = universe
+            self.universe?.deleteComponentsDelegate = galaxyVC
             navigationController?.pushViewController(galaxyVC, animated: true)
             
-        }
+//        }
     }
 }
 
 extension UniverseViewController: ReloadDataDelegate {
+    
     func reloadData(component: Compose?) {
+        //put nil to reloadData galaxyViewCotroller because I not adding anything
+        self.galaxyViewController?.reloadData(component: component)
+        
         self.collectionView?.reloadData()
-        self.galaxyViewController?.reloadData(component: nil)
+        //тепер минулих не зможу загрузити походу...
     }
     
     
@@ -81,7 +88,7 @@ private extension UniverseViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        layout.itemSize = CGSize(width: view.frame.size.width , height: view.frame.size.height / 8)
+        layout.itemSize = CGSize(width: view.frame.size.width , height: view.frame.size.height / 4)
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView?.backgroundColor = .white
         let nib = UINib(nibName: cellId, bundle: .main)

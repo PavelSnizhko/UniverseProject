@@ -19,16 +19,10 @@ class Universe: Compose {
     private var timer: Timer?
     private (set) var age: Int = 0
     private var universeRule: UniverseRule
-    private (set) var componentsDict: [UUID:Compose] = [:] {
-        didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.reloadDelegate?.reloadData(component: nil)
-
-            }
-        }
-    }
+    private (set) var componentsDict: [UUID:Compose] = [:]
     private var readyForDestroy: [UUID:Galaxy] = [:]
     private weak var delegate: GenerateViaDelegateProtocolGalaxy?
+    weak var deleteComponentsDelegate: DeleteComponentsDelegate?
     
     init(id: UUID, delegate: GenerateViaDelegateProtocolGalaxy?, timePeriod: Int, universeRule: UniverseRule, reloadDataDelegate: ReloadDataDelegate?) {
         self.id = id
@@ -39,6 +33,7 @@ class Universe: Compose {
         if let timer = timer {
             RunLoop.current.add(timer, forMode: .common)
         }
+        print("Universe is created")
     }
     
     func addComponent(component: Compose) {
@@ -61,14 +56,11 @@ extension Universe{
     
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule)  {
         self.age += timeInterval
-        print("\(timeInterval) СЕКУНД ВО ВСЕЛЕННОЙ")
-        print("Общее время \(self.age)")
-        
-        
+//        print("\(timeInterval) СЕКУНД ВО ВСЕЛЕННОЙ")
+                
         for component in componentsDict.values {
             if let galaxy = component as? Galaxy, galaxy.age >= 180, readyForDestroy[galaxy.id] == nil {
                 readyForDestroy[galaxy.id] = galaxy
-//                print("ДОБАВЛЕНА ГАЛАКТИКА ДЛЯ УНИЧТОЖЕНИЯ \(galaxy.id) С ВОЗРАСТОМ \(galaxy.age)")
             }
             component.handleTimePeriod(timeInterval: timeInterval, universeRule: self.universeRule)
         }
@@ -76,23 +68,25 @@ extension Universe{
         if let component = delegate?.generateGalaxy(){
 
             addComponent(component: component)
-//            print("СОЗДАНА НОВАЯ ГАЛАКТИКА")
+            self.reloadDelegate?.reloadData(component: component)
+            print("СОЗДАНА НОВАЯ ГАЛАКТИКА")
         }
+        
         if self.age % 30 == 0 && self.readyForDestroy.count >= 2  {
-//            print("БУДЕТ СОЗДАНА НОВАЯ ГАЛАКТИКА А ТООЧНЕЕ СЛИЯНИЕ ДВУХ ГАЛАКТИК в \(self.componentsDict.keys)")
             self.galaxyInteraction()
-//            print("СОЗДАНА НОВАЯ ГАЛАКТИКА А ТООЧНЕЕ СЛИЯНИЕ ДВУХ ГАЛАКТИК в \(self.componentsDict.keys)")
         }
 
     }
     
     
-    func smallDescription() -> String {
-        return "ID: \(id)"
+    func smallDescription() -> [String: String] {
+        return ["id": id.uuidString]
     }
     
-    func showContent() -> String {
-        return "Age: \(age) \t  Count of galaxies: \(componentsDict.count)"
+    func showContent() -> [String: String] {
+        return ["age" : String(self.age),
+                "weight": String(countWeight()),
+                "count of galaxies": String(componentsDict.count)]
     }
 }
 
@@ -107,10 +101,9 @@ extension Universe: Equatable {
 
 
 
-
-
-
 private extension Universe {
+    
+    // Todo Move to another class it's not approoriate to be here
     func galaxyInteraction() {
         var firstGalaxy: Galaxy
         var secondGalaxy: Galaxy
@@ -123,18 +116,17 @@ private extension Universe {
         var newGalaxy: Galaxy
         if firstGalaxy >= secondGalaxy {
             newGalaxy = firstGalaxy.interact(with: secondGalaxy)
-//            print("Was add new  \(newGalaxy) and destroyed \(secondGalaxy)")
         }
         else {
             newGalaxy = secondGalaxy.interact(with: firstGalaxy)
-//            print("Was add new  \(newGalaxy) and destroyed \(firstGalaxy)")
         }
-        componentsDict[firstGalaxy.id] = nil
-        componentsDict[secondGalaxy.id] = nil
+        
+        self.deleteComponentsDelegate?.deleteComponents(from: self, components: (componentsDict.removeValue(forKey: firstGalaxy.id)!, componentsDict.removeValue(forKey: secondGalaxy.id)!))
+        
         componentsDict[newGalaxy.id] = newGalaxy
         readyForDestroy[newGalaxy.id] = newGalaxy
+        self.reloadDelegate?.reloadData(component: newGalaxy)
         readyForDestroy[firstGalaxy.id] = nil
         readyForDestroy[secondGalaxy.id] = nil
     }
-    
 }
