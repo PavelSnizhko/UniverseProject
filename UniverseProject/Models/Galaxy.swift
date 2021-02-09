@@ -31,9 +31,7 @@ class Galaxy {
     weak var deleteDelegate: DeleteDataDelegate?
     weak var reloadDelegate: ReloadDataDelegate?
     
- 
-    
-    
+  
     init(id: UUID, type: GalaxyType, age: Int = 0, delegate: GenerateViaDelegateProtocolPlanetarySystem?) {
         self.id = id
         self.type = type
@@ -125,12 +123,12 @@ extension Galaxy: Comparable, Compose {
     }
     
     
-    func showContent() -> String {
-        return "Age: \(age)" + "\t Type: \(type)" + " \t Count of Planetary System \(componentsDict.count)"
+    func showContent() -> [String: String] {
+        return ["age": String(age), "type": type.rawValue, "count of nested systems": String(componentsDict.count), "weight": String(countWeight())]
     }
     
-    func smallDescription() -> String {
-        return " \(self.id) "
+    func smallDescription() -> [String: String] {
+        return ["id": id.uuidString]
     }
 }
 
@@ -142,26 +140,15 @@ extension Galaxy: Hashable {
 }
 
 
-//TODO Викликати знищення галактики якщо зіткнення
-
-
-
 extension Galaxy: DestroyPlanetarySystem {
-    // To have posibility in future acces by id to black hole I should not save under planetary system id but under blackHol's
+/*    To have posibility in future acces by id to black hole
+      I should not save under planetary system id but under blackHol's */
     func destroyPlanetarySystem(id: UUID, blackHole: BlackHole) {
-//        print("Зараз буде знищення цілої планетної системи в Галактиці \(self.componentsDict.values)")
         self.componentsDict[blackHole.id] = blackHole
         self.reloadDelegate?.reloadData(component: blackHole)
         let planetarySystem =  self.componentsDict.removeValue(forKey: id)
         self.deleteDelegate?.deleteData(from: self, planetarySystem: planetarySystem)
-        //comment this method because it is not good call and it will thow from list of planetaries to root
-
-        //        self.deleteDelegate?.deleteData(from: self)
-        
-        
-        //        print( "Має відкинути назад якщо у галактиці \(self.id)")
-//        print("Відбулося знищення цілої планетної системи в Галактиці \(self.componentsDict.values)")
-
+     
     }
     
     

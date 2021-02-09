@@ -86,7 +86,8 @@ extension Universe{
     func showContent() -> [String: String] {
         return ["age" : String(self.age),
                 "weight": String(countWeight()),
-                "count of galaxies": String(componentsDict.count)]
+                "count of nested systems": String(componentsDict.count),
+                ]
     }
 }
 

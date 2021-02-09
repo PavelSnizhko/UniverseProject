@@ -9,15 +9,19 @@ import UIKit
 
 class PlanetaryViewCell: UICollectionViewCell {
 
+    @IBOutlet weak var idLabel: UILabel!
     @IBOutlet private weak var type: UILabel!
     @IBOutlet private weak var weightLabel: UILabel!
     @IBOutlet private weak var countOfPlanetsLabel: UILabel!
     
-    var planet: Planet? {
+    var component: Compose? {
         didSet {
-            type.text = planet?.type.rawValue
-            weightLabel.text = String(planet?.weight ?? 0)
-            countOfPlanetsLabel.text = String(planet?.componentsDict.count ?? 0)
+            let shortRepresentationDict = component?.smallDescription()
+            let fullRepresentationDict = component?.showContent()
+            idLabel.text = shortRepresentationDict?["id"]
+            type.text = fullRepresentationDict?["type"]
+            weightLabel.text = fullRepresentationDict?["weight"]
+            countOfPlanetsLabel.text = fullRepresentationDict?["count of statelites"]
         }
     }
     
@@ -28,6 +32,6 @@ class PlanetaryViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        planet = nil
+        component = nil
     }
 }

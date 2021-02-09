@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AE0A8F8A25D27270001002AD /* BlackHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0A8F8925D27270001002AD /* BlackHole.swift */; };
 		AE256CEF25CEB48B00443AC9 /* PlanetarySystemViewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE256CED25CEB48900443AC9 /* PlanetarySystemViewCollectionViewCell.swift */; };
 		AE256CF025CEB48B00443AC9 /* PlanetarySystemViewCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE256CEE25CEB48A00443AC9 /* PlanetarySystemViewCollectionViewCell.xib */; };
 		AE256CF425CF043D00443AC9 /* BlackHoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE256CF225CF043B00443AC9 /* BlackHoleCollectionViewCell.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AE0A8F8925D27270001002AD /* BlackHole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHole.swift; sourceTree = "<group>"; };
 		AE256CED25CEB48900443AC9 /* PlanetarySystemViewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetarySystemViewCollectionViewCell.swift; sourceTree = "<group>"; };
 		AE256CEE25CEB48A00443AC9 /* PlanetarySystemViewCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlanetarySystemViewCollectionViewCell.xib; sourceTree = "<group>"; };
 		AE256CF225CF043B00443AC9 /* BlackHoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHoleCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				AEC5378025B9DD3900BDE7A0 /* Star.swift */,
 				AEC5378325B9DD4A00BDE7A0 /* Planet.swift */,
 				AE7FAB9725C04D8800D4E66F /* PlanetarySystem.swift */,
+				AE0A8F8925D27270001002AD /* BlackHole.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 				AE7FAB9825C04D8800D4E66F /* PlanetarySystem.swift in Sources */,
 				AEC5379825BAF42A00BDE7A0 /* GalaxyViewController.swift in Sources */,
 				AEC5377A25B9DC5F00BDE7A0 /* Universe.swift in Sources */,
+				AE0A8F8A25D27270001002AD /* BlackHole.swift in Sources */,
 				AEC5377725B9D95500BDE7A0 /* Composer.swift in Sources */,
 				AE7FABCA25C2F56300D4E66F /* PlanetaryViewCell.swift in Sources */,
 				AEC5375D25B96AA800BDE7A0 /* CollectionViewController.swift in Sources */,

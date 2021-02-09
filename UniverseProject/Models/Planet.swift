@@ -34,10 +34,10 @@ class Planet {
     
     deinit {
         if componentsDict.isEmpty {
-            print("Was deleted statelite")
+            print("maybe was deleted statelite or planet with 0 statelites")
         }
         else {
-            print("Was deleted statelite planet")
+            print("Was deleted  planet")
         }
     }
 }
@@ -51,20 +51,15 @@ extension Planet: Compose {
 
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
         self.age += timeInterval
-        print("Планета \(id.uuidString) прожила \(self.age)")
+        //TODO: check this - do I realy need this reloadData ???
         self.reloadDelegate?.reloadData(component: nil)
     }
     
-    func showContent() -> String {
-        if componentsDict.isEmpty {
-            return " \n Statelite \(id.uuidString + "\t" + type.rawValue + "\n") "
-        }
-        return "Planet \(id.uuidString ) has  " + componentsDict.values.reduce(" ", { result, component -> String in
-            result + component.showContent()
-        })
+    func showContent() -> [String: String] {
+        return  ["type": type.rawValue, "age": String(age), "weight": String(weight), "count of statelites": String(componentsDict.count)]
     }
     
-    func smallDescription() -> String {
-        return id.uuidString + "\t" + type.rawValue
+    func smallDescription() -> [String: String] {
+        return ["id": id.uuidString]
     }
 }

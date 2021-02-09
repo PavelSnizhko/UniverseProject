@@ -112,8 +112,9 @@ extension GalaxyViewController: DeleteDataDelegate, DeleteComponentsDelegate {
         for (index, galaxy) in galaxies.enumerated() {
             if components.0 == galaxy || components.1 == galaxy {
                 // scenario if I view planetViewController
-                if galaxy.id == planetarySystemVC?.component?.id {
-                    self.planetarySystemVC?.showAlert()
+                if galaxy.id == planetarySystemVC?.component?.id, let planetarySystemVC = planetarySystemVC {
+                    // this condition for collision
+                    planetarySystemVC.cameBackToRootVC(from: planetarySystemVC, with: UIAlertController (title: "Go back to UniverseVC", message: "Probably, Galaxy was collided", preferredStyle: .alert))
                 }
                 print("зараз видалю -()-" + galaxy.id.uuidString)
                 
@@ -138,10 +139,6 @@ extension GalaxyViewController: DeleteDataDelegate, DeleteComponentsDelegate {
             // this condition for blackHole
             self.planetarySystemVC?.deletePlanetarySystem(component: planetarySystem)
         }
-        if  planetarySystem?.id == planetarySystemVC?.component?.id {
-            self.planetarySystemVC?.showAlert()
-        }
-        
     }
 }
 

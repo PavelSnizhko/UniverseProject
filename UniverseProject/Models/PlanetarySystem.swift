@@ -22,14 +22,6 @@ class PlanetarySystem: Compose, PosibleBlackHole {
     var age: Int = 0
     private(set) var star: Compose?
     private(set) var componentsDict: [UUID:Compose] = [:]
-//    {
-//        didSet {
-//            DispatchQueue.main.async { [weak self] in
-//                self?.reloadDelegate?.reloadData(component: nil)
-//
-//            }
-//        }
-//    }
     weak var delegateModelGenerator: GenerateViaDelegateNewComponent?
     weak var delegateDestroyPlanetarySystem: DestroyPlanetarySystem?
     weak var reloadDelegate: ReloadDataDelegate?
@@ -44,13 +36,14 @@ class PlanetarySystem: Compose, PosibleBlackHole {
         self.delegateDestroyPlanetarySystem = delegateDestroyPlanetarySystem
     }
     
-    func smallDescription() -> String {
-        return "\(id.uuidString)"
+    func smallDescription() -> [String: String] {
+        return ["id": id.uuidString]
     }
     
-    func showContent() -> String {
-        guard let star = star else { return " The system is died"  }
-        return "Host star \(star.id) Counts of planets \(componentsDict.count)"
+    func showContent() -> [String: String] {
+        //this guard shouldn't be awoke just for avoid force unwrap
+        guard let star = star else { return  ["state": "The system is died"] }
+        return ["host star": star.id.uuidString, "count of planets": String(componentsDict.count), "weight": String(countWeight()), "age": String(age)]
     }
     
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
@@ -59,7 +52,6 @@ class PlanetarySystem: Compose, PosibleBlackHole {
             if let component = self.delegateModelGenerator?.generatePlanet() {
                 componentsDict[component.id] = component
                 self.reloadDelegate?.reloadData(component: component)
-
             }
         }
         self.reloadDelegate?.reloadData(component: nil)

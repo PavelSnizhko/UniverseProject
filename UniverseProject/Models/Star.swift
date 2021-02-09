@@ -96,55 +96,13 @@ extension Star: Compose {
     
 
     
-    func showContent() -> String {
-        return  id.uuidString + type.rawValue + "\(self.age)" + evolutionStage.rawValue
+    func showContent() -> [String: String] {
+        return ["type": type.rawValue, "age": String(age), "stage": self.evolutionStage.rawValue, "weight": String(weight), "radius": String(radius), "luminosity": String(luminosity), "temperature": String(tempterature)]
     }
     
-    func smallDescription() -> String {
-        return id.uuidString + type.rawValue + "\(self.age)"
+    func smallDescription() -> [String: String] {
+        return ["id": id.uuidString]
     }
     
 }
 
-
-class BlackHole: Compose {
-    private(set) var id: UUID
-    private(set) var age: Int = 0
-    let radius: Int
-    let weight: Int
-    weak var reloadDelegate: ReloadDataDelegate?
-    private(set) var componentsDict: [UUID : Compose] = [:]
-
-    
-    init(id: UUID, weight: Int, radius: Int) {
-        self.id = id
-        self.weight = weight
-        self.radius = radius
-        print(".............BlackHole is created..................................")
-    }
-    
-    deinit {
-        print("...........||| BlackHole is delete |||..................................")
-
-    }
-    
-    
-    func countWeight() -> Int {
-        self.weight
-    }
-    
-    func smallDescription() -> String {
-        return id.uuidString + "I'm black hole"
-    }
-    
-    func showContent() -> String {
-        return "\(id) \t" +  "\(weight) \t" + "\(radius) \t"
-    }
-    
-    func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
-        self.age += timeInterval
-        print("Добавився час в Чорній дирі")
-    }
-    
-   
-}

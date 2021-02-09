@@ -7,7 +7,28 @@
 
 import UIKit
 
-class PlanetarySystemViewController: UIViewController {
+
+protocol Alertable {
+    func cameBackToRootVC(from controller: UIViewController, with alert: UIAlertController)
+}
+
+extension Alertable {
+
+    func cameBackToRootVC(from controller: UIViewController, with alert: UIAlertController) {
+        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler:{ [weak controller] (alertOKAction) in
+            controller?.dismiss(animated: false, completion: nil)
+            controller?.navigationController?.popToRootViewController(animated: true)
+            print("Було викликано АЛЕРТ для повернення")
+                    }))
+        controller.present(alert, animated: true, completion: nil)
+    }
+    
+
+}
+
+
+
+class PlanetarySystemViewController: UIViewController, Alertable {
     var currentId: UUID?
     weak var planetViewController: PlanetViewController?
     weak var component: Compose?
@@ -134,8 +155,9 @@ extension PlanetarySystemViewController: ReloadDataDelegate, DeleteDataDelegate 
             if component == planetarySystem {
                 
                 // scenario if I view planetViewController
-                if  component.id == planetViewController?.component?.id {
-                    self.planetViewController?.showAlert()
+                if  component.id == planetViewController?.component?.id, let planetViewController = planetViewController {
+                    
+                    planetViewController.cameBackToRootVC(from: planetViewController, with: UIAlertController (title: "Go back to Universe View Controller", message: "There was created Black Hole", preferredStyle: .alert))
                 }
                 
                 
@@ -155,32 +177,10 @@ extension PlanetarySystemViewController: ReloadDataDelegate, DeleteDataDelegate 
     
     func deleteData(from component: Compose) {
         
-        if  component.id == planetViewController?.component?.id {
-            self.planetViewController?.showAlert()
-        }
+        if  component.id == planetViewController?.component?.id, let planetViewController = self.planetViewController {
+            planetViewController.cameBackToRootVC(from: planetViewController, with: UIAlertController (title: "Go back to Universe View Controller", message: "There was created Black Hole", preferredStyle: .alert))        }
     }
 }
 
-
-extension PlanetarySystemViewController {
-    
-    func showAlert() {
-        let alert = UIAlertController (title: "Go back", message: "Maybe, Galaxy is collided or was created Black Hole", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler:{ [weak self] (alertOKAction) in
-            self?.popThisView()
-            print("Було викликано АЛЕРТ для повернення")
-                    }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    func popThisView() {
-        self.dismiss(animated: false, completion: nil)
-        self.navigationController?.popToRootViewController(animated: true)
-    }
-
-
-    
-
-}
 
 

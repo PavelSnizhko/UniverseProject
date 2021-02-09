@@ -9,16 +9,11 @@ import UIKit
 
 private let reuseIdentifier = "Cell"
 
-class PlanetViewController: UIViewController {
+class PlanetViewController: UIViewController, Alertable {
     
     var planetaryId: UUID?
     weak var component: Compose?
     private var planets: [Compose] = []
-    
-//    {
-//        component?.getComponents() ?? []
-//    }
-
     let cellId = String(describing: PlanetaryViewCell.self)
     var collectionView: UICollectionView?
 
@@ -56,8 +51,7 @@ extension PlanetViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         guard let myCell = cell as? PlanetaryViewCell else { return }
-        guard let planet = self.planets[indexPath.row] as? Planet else { return }
-        myCell.planet = planet
+        myCell.component = self.planets[indexPath.row]
     }
 
 }
@@ -91,20 +85,4 @@ extension PlanetViewController: ReloadDataDelegate {
     }
 }
 
-
-extension PlanetViewController {
-    func showAlert() {
-        let alert = UIAlertController (title: "Go back", message: "Maybe, Galaxy is collided or was created Black Hole", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler:{ [weak self] (alertOKAction) in
-            self?.popThisView()
-            print("Було викликано АЛЕРТ для повернення")
-                    }))
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    func popThisView() {
-        self.dismiss(animated: false, completion: nil)
-        self.navigationController!.popToRootViewController(animated: true)
-    }
-}
 

@@ -103,6 +103,7 @@
             <size key="customSize" width="340" height="197"/>
             <connections>
                 <outlet property="countOfPlanetsLabel" destination="JFr-pI-xzL" id="8gR-XZ-TPh"/>
+                <outlet property="idLabel" destination="sjt-uO-dQ8" id="9yP-lb-mrY"/>
                 <outlet property="type" destination="scU-fe-TC1" id="8Cj-18-wjU"/>
                 <outlet property="weightLabel" destination="o5i-Dv-CeV" id="V7x-HP-EIV"/>
             </connections>

@@ -15,28 +15,26 @@ class PlanetarySystemViewCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var evolutionStage: UILabel!
     @IBOutlet weak var weight: UILabel!
     @IBOutlet weak var radiusOfStar: UILabel!
-    @IBOutlet weak var countsOfPlanets: UILabel!
+    @IBOutlet weak var luminosityLabel: UILabel!
+    @IBOutlet weak var temperatureLabel: UILabel!
+    @IBOutlet weak var countOfPlanetsLabel: UILabel!
     
     var planetarySystem: PlanetarySystem? {
         didSet {
-            guard let planetarySystem = planetarySystem else {
-                planetarySystemId.text = ""
-                starId.text = ""
-                typeOfStar.text = ""
-                evolutionStage.text = ""
-                weight.text = ""
-                radiusOfStar.text = ""
-                return
-            }
-            planetarySystemId.text = planetarySystem.id.uuidString
-            if let star = planetarySystem.star as? Star {
-                starId.text = star.id.uuidString
-                typeOfStar.text = star.type.rawValue
-                evolutionStage.text = star.evolutionStage.rawValue
-                weight.text = String(star.weight)
-                radiusOfStar.text = String(star.radius)
-            }
-            countsOfPlanets.text = String(planetarySystem.componentsDict.count)
+            let shortRepresentationDict = planetarySystem?.smallDescription()
+            let fullRepresentationDict = planetarySystem?.showContent()
+            let shortStarRepresentationDict = planetarySystem?.star?.smallDescription()
+            let fullStarRepresentationDict = planetarySystem?.star?.showContent()
+            
+            planetarySystemId.text = shortRepresentationDict?["id"]
+            starId.text = shortStarRepresentationDict?["id"]
+            typeOfStar.text = fullStarRepresentationDict?["type"]
+            evolutionStage.text = fullStarRepresentationDict?["stage"]
+            weight.text = fullStarRepresentationDict?["weight"]
+            radiusOfStar.text = fullStarRepresentationDict?["radius"]
+            luminosityLabel.text = fullStarRepresentationDict?["luminosity"]
+            temperatureLabel.text = fullStarRepresentationDict?["temperature"]
+            countOfPlanetsLabel.text = fullRepresentationDict?["count of planets"]
         }
     }
     
