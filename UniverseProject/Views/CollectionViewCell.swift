@@ -15,11 +15,11 @@ class CollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var ageLabel: UILabel!
     @IBOutlet weak var countOfNestedComponentsLabel: UILabel!
-    var component: Compose? {
+    weak var component: Compose? {
         didSet {
-            let shortRepresentationDict = component?.smallDescription()
-            let fullRepresentationDict = component?.showContent()
-            idLabel.text = shortRepresentationDict?["id"]
+            let briefRepresentationDict = component?.getBriefSystemRepresentation()
+            let fullRepresentationDict = component?.getFullSystemRespresentation()
+            idLabel.text = briefRepresentationDict?["id"]
             weightLabel.text = fullRepresentationDict?["weight"]
             countOfNestedComponentsLabel.text = fullRepresentationDict?["count of nested systems"]
             ageLabel.text = fullRepresentationDict?["age"]

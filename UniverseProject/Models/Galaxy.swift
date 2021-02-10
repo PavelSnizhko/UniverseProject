@@ -66,8 +66,9 @@ class Galaxy {
     }
     
     func interact(with galaxy: Galaxy) -> Galaxy {
+       
         var newDict = self.componentsDict.reduce(into: galaxy.componentsDict) { (r, e) in r[e.0] = e.1 }
-
+        
         //TODO: separet this logic
         let numberElemetsForDestroying = Int(Double(newDict.count) * 0.1)
         for _ in 0..<numberElemetsForDestroying {
@@ -123,11 +124,11 @@ extension Galaxy: Comparable, Compose {
     }
     
     
-    func showContent() -> [String: String] {
+    func getFullSystemRespresentation() -> [String: String] {
         return ["age": String(age), "type": type.rawValue, "count of nested systems": String(componentsDict.count), "weight": String(countWeight())]
     }
     
-    func smallDescription() -> [String: String] {
+    func getBriefSystemRepresentation() -> [String: String] {
         return ["id": id.uuidString]
     }
 }
@@ -146,7 +147,7 @@ extension Galaxy: DestroyPlanetarySystem {
     func destroyPlanetarySystem(id: UUID, blackHole: BlackHole) {
         self.componentsDict[blackHole.id] = blackHole
         self.reloadDelegate?.reloadData(component: blackHole)
-        let planetarySystem =  self.componentsDict.removeValue(forKey: id)
+        let planetarySystem = self.componentsDict.removeValue(forKey: id)
         self.deleteDelegate?.deleteData(from: self, planetarySystem: planetarySystem)
      
     }

@@ -8,15 +8,13 @@
 import Foundation
 
 
-
 class ModelGenerator: PowerModelGenerator {
         
     func generateBlackHole(star: Star) -> BlackHole {
         return BlackHole(id: star.id, weight: star.weight, radius: star.radius)
     }
     
-
-    
+   
     func generatePlanetarySystem(galaxyDelegat: Galaxy) -> Compose {
         let type = Star.StarType.allCases.randomElement()!
         return PlanetarySystem(id: UUID(), delegateModelGenerator: self, delegateDestroyPlanetarySystem: galaxyDelegat, mainStar: Star(id: UUID(), weight: Int.random(in: 0..<100), type: type, temeperature: Int.random(in: 0..<100), luminosity: Int.random(in: 0..<100), radius: Int.random(in: 0..<100)))

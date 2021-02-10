@@ -16,7 +16,7 @@ class Planet {
     
     weak var delegate: GenerateViaDelegateProtocolSatellite?
     
-    var id: UUID
+    private(set) var id: UUID
     private(set) var type: PlanetType
     private(set) var weight: Int
     private(set) var age: Int = 0
@@ -55,11 +55,11 @@ extension Planet: Compose {
         self.reloadDelegate?.reloadData(component: nil)
     }
     
-    func showContent() -> [String: String] {
+    func getFullSystemRespresentation() -> [String: String] {
         return  ["type": type.rawValue, "age": String(age), "weight": String(weight), "count of statelites": String(componentsDict.count)]
     }
     
-    func smallDescription() -> [String: String] {
+    func getBriefSystemRepresentation() -> [String: String] {
         return ["id": id.uuidString]
     }
 }

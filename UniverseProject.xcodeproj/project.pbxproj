@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		AE0A8F8A25D27270001002AD /* BlackHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0A8F8925D27270001002AD /* BlackHole.swift */; };
+		AE0A8F8E25D2E703001002AD /* AlertableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0A8F8D25D2E702001002AD /* AlertableProtocol.swift */; };
 		AE256CEF25CEB48B00443AC9 /* PlanetarySystemViewCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE256CED25CEB48900443AC9 /* PlanetarySystemViewCollectionViewCell.swift */; };
 		AE256CF025CEB48B00443AC9 /* PlanetarySystemViewCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = AE256CEE25CEB48A00443AC9 /* PlanetarySystemViewCollectionViewCell.xib */; };
 		AE256CF425CF043D00443AC9 /* BlackHoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE256CF225CF043B00443AC9 /* BlackHoleCollectionViewCell.swift */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		AE0A8F8925D27270001002AD /* BlackHole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHole.swift; sourceTree = "<group>"; };
+		AE0A8F8D25D2E702001002AD /* AlertableProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertableProtocol.swift; sourceTree = "<group>"; };
 		AE256CED25CEB48900443AC9 /* PlanetarySystemViewCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetarySystemViewCollectionViewCell.swift; sourceTree = "<group>"; };
 		AE256CEE25CEB48A00443AC9 /* PlanetarySystemViewCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlanetarySystemViewCollectionViewCell.xib; sourceTree = "<group>"; };
 		AE256CF225CF043B00443AC9 /* BlackHoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHoleCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				AEC537CA25BB66CC00BDE7A0 /* PlanetViewController.swift */,
 				AEC5379725BAF42800BDE7A0 /* GalaxyViewController.swift */,
 				AEC5375C25B96AA800BDE7A0 /* CollectionViewController.swift */,
+				AE0A8F8D25D2E702001002AD /* AlertableProtocol.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 				AE7FABC225C2E62A00D4E66F /* PlanetarySystemViewController.swift in Sources */,
 				AEC5377325B9789D00BDE7A0 /* CollectionViewCell.swift in Sources */,
 				AEC5379225B9DF2800BDE7A0 /* GenerateViaDelegateProtocol.swift in Sources */,
+				AE0A8F8E25D2E703001002AD /* AlertableProtocol.swift in Sources */,
 				AE7FAB9825C04D8800D4E66F /* PlanetarySystem.swift in Sources */,
 				AEC5379825BAF42A00BDE7A0 /* GalaxyViewController.swift in Sources */,
 				AEC5377A25B9DC5F00BDE7A0 /* Universe.swift in Sources */,

@@ -11,8 +11,8 @@ import Foundation
 class BlackHole: Compose {
     private(set) var id: UUID
     private(set) var age: Int = 0
-    let radius: Int
-    let weight: Int
+    private let radius: Int
+    private let weight: Int
     weak var reloadDelegate: ReloadDataDelegate?
     private(set) var componentsDict: [UUID : Compose] = [:]
 
@@ -34,11 +34,11 @@ class BlackHole: Compose {
         self.weight
     }
     
-    func smallDescription() -> [String: String] {
+    func getBriefSystemRepresentation() -> [String: String] {
         return ["id": id.uuidString]
     }
     
-    func showContent() -> [String: String] {
+    func getFullSystemRespresentation() -> [String: String] {
         return ["weight": String(countWeight()), "radius": String(radius), "age": String(age) ]
     }
     

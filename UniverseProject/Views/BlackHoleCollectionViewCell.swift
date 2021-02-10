@@ -15,10 +15,10 @@ class BlackHoleCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var ageLabel: UILabel!
     
     
-    var blackHole: BlackHole? {
+    weak var blackHole: BlackHole? {
         didSet {
-            let shortBlackHoleDescriptionDict = blackHole?.smallDescription()
-            let fullBlackHoleDescription = blackHole?.showContent()
+            let shortBlackHoleDescriptionDict = blackHole?.getBriefSystemRepresentation()
+            let fullBlackHoleDescription = blackHole?.getFullSystemRespresentation()
             idLabel.text = shortBlackHoleDescriptionDict?["id"]
             radiusLabel.text = fullBlackHoleDescription?["radius"]
             weightLabel.text = fullBlackHoleDescription?["weight"]

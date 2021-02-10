@@ -14,10 +14,10 @@ class PlanetaryViewCell: UICollectionViewCell {
     @IBOutlet private weak var weightLabel: UILabel!
     @IBOutlet private weak var countOfPlanetsLabel: UILabel!
     
-    var component: Compose? {
+    weak var component: Compose? {
         didSet {
-            let shortRepresentationDict = component?.smallDescription()
-            let fullRepresentationDict = component?.showContent()
+            let shortRepresentationDict = component?.getBriefSystemRepresentation()
+            let fullRepresentationDict = component?.getFullSystemRespresentation()
             idLabel.text = shortRepresentationDict?["id"]
             type.text = fullRepresentationDict?["type"]
             weightLabel.text = fullRepresentationDict?["weight"]

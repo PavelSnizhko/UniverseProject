@@ -111,22 +111,24 @@ extension GalaxyViewController: DeleteDataDelegate, DeleteComponentsDelegate {
     func deleteComponents(from component: Compose, components: (Compose, Compose)) {
         for (index, galaxy) in galaxies.enumerated() {
             if components.0 == galaxy || components.1 == galaxy {
-                // scenario if I view planetViewController
+                
+                self.galaxies.remove(at: index)
+                let indexPath = IndexPath(row: index, section: 0)
+                DispatchQueue.main.async {
+                    self.collectionView?.performBatchUpdates({
+                        self.collectionView?.deleteItems(at: [indexPath])
+                        }) { (finished) in
+                        self.collectionView?.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
+                    }
+                }
+                // scenario if I'am on planetarySystemVC
                 if galaxy.id == planetarySystemVC?.component?.id, let planetarySystemVC = planetarySystemVC {
                     // this condition for collision
                     planetarySystemVC.cameBackToRootVC(from: planetarySystemVC, with: UIAlertController (title: "Go back to UniverseVC", message: "Probably, Galaxy was collided", preferredStyle: .alert))
                 }
                 print("зараз видалю -()-" + galaxy.id.uuidString)
                 
-                self.galaxies.remove(at: index)
-                let indexPath = IndexPath(row: index, section: 0)
-
-                self.collectionView?.performBatchUpdates({
-                    self.collectionView?.deleteItems(at: [indexPath])
-                    }) { (finished) in
-//                    self.collectionView?.reloadData()
-                    self.collectionView?.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
-                }
+               
             }
         }
     }

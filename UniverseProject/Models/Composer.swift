@@ -17,8 +17,8 @@ protocol Compose: class {
     var componentsDict: [UUID: Compose] { get }
     var reloadDelegate: ReloadDataDelegate? { get set }
     func countWeight() -> Int
-    func smallDescription() -> [String: String]
-    func showContent() -> [String: String]
+    func getBriefSystemRepresentation() -> [String: String]
+    func getFullSystemRespresentation() -> [String: String]
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule)
 }
 
@@ -35,6 +35,9 @@ func ==(lhs: Compose, rhs: Compose) -> Bool {
     guard type(of: lhs) == type(of: rhs) else { return false }
     return lhs.id == rhs.id
 }
+
+
+
 
 
 

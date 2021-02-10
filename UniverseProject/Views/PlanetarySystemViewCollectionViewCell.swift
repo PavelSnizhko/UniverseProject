@@ -19,13 +19,13 @@ class PlanetarySystemViewCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var countOfPlanetsLabel: UILabel!
     
-    var planetarySystem: PlanetarySystem? {
+    weak var planetarySystem: PlanetarySystem? {
         didSet {
-            let shortRepresentationDict = planetarySystem?.smallDescription()
-            let fullRepresentationDict = planetarySystem?.showContent()
-            let shortStarRepresentationDict = planetarySystem?.star?.smallDescription()
-            let fullStarRepresentationDict = planetarySystem?.star?.showContent()
-            
+            let shortRepresentationDict = planetarySystem?.getBriefSystemRepresentation()
+            let fullRepresentationDict = planetarySystem?.getFullSystemRespresentation()
+            let shortStarRepresentationDict = planetarySystem?.star?.getBriefSystemRepresentation()
+            let fullStarRepresentationDict = planetarySystem?.star?.getFullSystemRespresentation()
+    
             planetarySystemId.text = shortRepresentationDict?["id"]
             starId.text = shortStarRepresentationDict?["id"]
             typeOfStar.text = fullStarRepresentationDict?["type"]

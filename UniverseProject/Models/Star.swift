@@ -33,7 +33,7 @@ class Star {
         case carlic = "Final evolution stage"
     }
 
-    var id: UUID
+    private(set) var id: UUID
     private(set) var type: StarType
     private(set) var age: Int = 0
     private(set) var weight: Int
@@ -96,11 +96,11 @@ extension Star: Compose {
     
 
     
-    func showContent() -> [String: String] {
+    func getFullSystemRespresentation() -> [String: String] {
         return ["type": type.rawValue, "age": String(age), "stage": self.evolutionStage.rawValue, "weight": String(weight), "radius": String(radius), "luminosity": String(luminosity), "temperature": String(tempterature)]
     }
     
-    func smallDescription() -> [String: String] {
+    func getBriefSystemRepresentation() -> [String: String] {
         return ["id": id.uuidString]
     }
     

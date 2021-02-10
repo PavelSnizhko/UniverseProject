@@ -28,7 +28,7 @@ class Universe: Compose {
         self.id = id
         self.delegate = delegate
         self.universeRule = universeRule
-        self.timer = Timer(timeInterval: 2, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
+        self.timer = Timer(timeInterval: 3, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
         self.reloadDelegate = reloadDataDelegate
         if let timer = timer {
             RunLoop.current.add(timer, forMode: .common)
@@ -69,7 +69,7 @@ extension Universe{
 
             addComponent(component: component)
             self.reloadDelegate?.reloadData(component: component)
-            print("СОЗДАНА НОВАЯ ГАЛАКТИКА")
+            print("Got bith new galaxy")
         }
         
         if self.age % 30 == 0 && self.readyForDestroy.count >= 2  {
@@ -79,19 +79,17 @@ extension Universe{
     }
     
     
-    func smallDescription() -> [String: String] {
+    func getBriefSystemRepresentation() -> [String: String] {
         return ["id": id.uuidString]
     }
     
-    func showContent() -> [String: String] {
+    func getFullSystemRespresentation() -> [String: String] {
         return ["age" : String(self.age),
                 "weight": String(countWeight()),
                 "count of nested systems": String(componentsDict.count),
                 ]
     }
 }
-
-
 
 
 extension Universe: Equatable {
@@ -121,6 +119,7 @@ private extension Universe {
         else {
             newGalaxy = secondGalaxy.interact(with: firstGalaxy)
         }
+        
         
         self.deleteComponentsDelegate?.deleteComponents(from: self, components: (componentsDict.removeValue(forKey: firstGalaxy.id)!, componentsDict.removeValue(forKey: secondGalaxy.id)!))
         
