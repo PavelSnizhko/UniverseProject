@@ -26,7 +26,6 @@ class BlackHole: Compose {
     
     deinit {
         print("...........||| BlackHole is delete |||..................................")
-
     }
     
     
@@ -44,7 +43,6 @@ class BlackHole: Compose {
     
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
         self.age += timeInterval
-        print("Добавився час в Чорній дирі")
     }
     
    

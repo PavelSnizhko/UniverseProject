@@ -59,7 +59,7 @@ extension UniverseViewController: UICollectionViewDelegate, UICollectionViewData
 //        if let universe = self.universe as? Universe {
             let galaxyVC = storyboard?.instantiateViewController(withIdentifier: "GalaxyViewController") as! GalaxyViewController
             galaxyViewController = galaxyVC
-            galaxyVC.component = universe
+            galaxyVC.universe = universe
             self.universe?.deleteComponentsDelegate = galaxyVC
             navigationController?.pushViewController(galaxyVC, animated: true)
             

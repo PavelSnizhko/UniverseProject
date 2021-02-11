@@ -8,8 +8,8 @@
 import Foundation
 
 
-protocol DestroyPlanetarySystem: class {
-    func destroyPlanetarySystem(id: UUID, blackHole: BlackHole)
+protocol DestroyingPlanetarySystem: class {
+    func destroy(id: UUID, blackHole: BlackHole)
 }
 
 typealias GenerateViaDelegateNewComponent = GenerateViaDelegateProtocolPlanet & GenerateViaDelegateProtocolBlackHole
@@ -17,23 +17,23 @@ typealias GenerateViaDelegateNewComponent = GenerateViaDelegateProtocolPlanet & 
 class PlanetarySystem: Compose, PosibleBlackHole {
     
     // In this case can be make more then 1 star, but to simplify made for 1
-    // contentArray naming due to there can be diff objects some commets for example
+    // componentsDict naming due to there can be diff objects for example some commets 
     private(set) var id: UUID
     private(set) var age: Int = 0
     private(set) var star: Compose?
     private(set) var componentsDict: [UUID:Compose] = [:]
     weak var delegateModelGenerator: GenerateViaDelegateNewComponent?
-    weak var delegateDestroyPlanetarySystem: DestroyPlanetarySystem?
+    weak var delegateDestroyPlanetarySystem: DestroyingPlanetarySystem?
     weak var reloadDelegate: ReloadDataDelegate?
     weak var deleteDelegate: DeleteDataDelegate?
 
 
     
-    init(id: UUID, delegateModelGenerator: ModelGenerator, delegateDestroyPlanetarySystem: Galaxy, mainStar: Star) {
+    init(id: UUID, delegateModelGenerator: ModelGenerator, destroyingPlanetarySystemDelegate: Galaxy, mainStar: Star) {
         self.id = id
         self.star = mainStar.setDelegate(blackHoleDelegate: self)
         self.delegateModelGenerator = delegateModelGenerator
-        self.delegateDestroyPlanetarySystem = delegateDestroyPlanetarySystem
+        self.delegateDestroyPlanetarySystem = destroyingPlanetarySystemDelegate
     }
     
     func getBriefSystemRepresentation() -> [String: String] {
@@ -65,7 +65,7 @@ class PlanetarySystem: Compose, PosibleBlackHole {
     
     func changeStarToBlackHole(star: Star) {
         guard let blackHole = self.delegateModelGenerator?.generateBlackHole(star: star) else { return }
-        delegateDestroyPlanetarySystem?.destroyPlanetarySystem(id: self.id, blackHole: blackHole )
+        delegateDestroyPlanetarySystem?.destroy(id: self.id, blackHole: blackHole )
         print(" Black hole transparent to Galaxy")
     }
     

@@ -10,7 +10,7 @@ import UIKit
 class PlanetarySystemViewController: UIViewController, Alertable {
     var currentId: UUID?
     weak var planetViewController: PlanetViewController?
-    weak var component: Compose?
+    weak var galaxy: Compose?
     private var planetarySystems: [Compose] = []
     let planetarySystemCellId = String(describing: PlanetarySystemViewCollectionViewCell.self)
     let blackHoleCellId = String(describing: BlackHoleCollectionViewCell.self)
@@ -34,7 +34,7 @@ class PlanetarySystemViewController: UIViewController, Alertable {
     }
     
     func initDataSourceArray() {
-        guard let components = self.component?.getComponents() else { return }
+        guard let components = self.galaxy?.getComponents() else { return }
         self.planetarySystems = components
     }
 }
@@ -46,12 +46,10 @@ extension PlanetarySystemViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // bad refactor it PLEASE!!!
-        print(planetarySystems)
         if (planetarySystems[indexPath.row] as? PlanetarySystem) != nil {
             return collectionView.dequeueReusableCell(withReuseIdentifier: planetarySystemCellId, for: indexPath)
         }
         else {
-            print(collectionView.dequeueReusableCell(withReuseIdentifier: blackHoleCellId, for: indexPath))
             return collectionView.dequeueReusableCell(withReuseIdentifier: blackHoleCellId, for: indexPath)
         }
     
@@ -120,38 +118,31 @@ extension PlanetarySystemViewController: ReloadDataDelegate, DeleteDataDelegate 
         self.planetarySystems.append(planetarySystem)
         let indexPath = IndexPath(row: self.planetarySystems.count - 1, section: 0)
         self.collectionView?.performBatchUpdates({ self.collectionView?.insertItems(at: [indexPath]) }) { (finished) in
-            print("I want to reload \(planetarySystem)")
             self.collectionView?.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
         }
         self.collectionView?.layoutIfNeeded()
         // if planetViewController isn't nil then update next vc
-        //should I reload data in the next viewController from that ?? only for updating time or weight???
         self.planetViewController?.reloadData(component: nil)
     }
     
 
     func deletePlanetarySystem(component: Compose) {
-        // maybe not bad algorithm because heavier systems will be higher in the array
+        // maybe not bad algorithm because older systems will be higher in the array and return statement reduce complexity
+        // scenario if I view planetViewController
         for (index, planetarySystem) in planetarySystems.enumerated() {
+            if  component.id == planetViewController?.component?.id, let planetViewController = planetViewController {
+                planetViewController.cameBackToRootVC(from: planetViewController, with: UIAlertController (title: "Go back to Universe View Controller", message: "There was created Black Hole", preferredStyle: .alert))
+            }
+            
             if component == planetarySystem {
-                
                 self.planetarySystems.remove(at: index)
                 let indexPath = IndexPath(row: index, section: 0)
-
-                self.collectionView?.performBatchUpdates({
-                    self.collectionView?.deleteItems(at: [indexPath])
-                    }) { (finished) in
-//                    self.collectionView?.reloadData()
-                    DispatchQueue.main.async {
+                self.collectionView?.performBatchUpdates({ self.collectionView?.deleteItems(at: [indexPath]) }) { (finished) in
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
                         self.collectionView?.reloadItems(at: self.collectionView!.indexPathsForVisibleItems)
                     }
                 }
-                
-                // scenario if I view planetViewController
-                if  component.id == planetViewController?.component?.id, let planetViewController = planetViewController {
-                    
-                    planetViewController.cameBackToRootVC(from: planetViewController, with: UIAlertController (title: "Go back to Universe View Controller", message: "There was created Black Hole", preferredStyle: .alert))
-                }          
                 return
             }
         }

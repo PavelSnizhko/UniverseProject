@@ -7,9 +7,6 @@
 
 import Foundation
 
-enum ComparableError: Error {
-    case nillException
-}
 
 class Galaxy {
     /*
@@ -37,24 +34,24 @@ class Galaxy {
         self.type = type
         self.age = age
         self.delegate = delegate
-        print("Galaxy is just created")
+//        print("Galaxy is just created")
     }
     
-    init(id: UUID, type: GalaxyType, age: Int = 0, delegate: GenerateViaDelegateProtocolPlanetarySystem?, contentArray: [UUID:Compose]) {
+    
+    init(id: UUID, type: GalaxyType, age: Int = 0, delegate: GenerateViaDelegateProtocolPlanetarySystem?, planetarySystems: [UUID:Compose]) {
         self.id = id
         self.type = type
         self.age = age
         self.delegate = delegate
-        self.componentsDict = contentArray
-        print("Galaxy is created due to was COLISION")
+        self.componentsDict = planetarySystems
+//        print("Galaxy is created due to was COLISION")
 
     }
-    
     
     func increaseWeight(weight: Int) {
         self.weight += weight
     }
-    
+      
     
     func addComponent(component: Compose) {
         componentsDict[component.id] = component
@@ -67,20 +64,18 @@ class Galaxy {
     
     func interact(with galaxy: Galaxy) -> Galaxy {
        
-        var newDict = self.componentsDict.reduce(into: galaxy.componentsDict) { (r, e) in r[e.0] = e.1 }
+        var newPlanetarySystemsDict = self.componentsDict.reduce(into: galaxy.componentsDict) { (r, e) in r[e.0] = e.1 }
         
-        //TODO: separet this logic
-        let numberElemetsForDestroying = Int(Double(newDict.count) * 0.1)
+        let numberElemetsForDestroying = Int(Double(newPlanetarySystemsDict.count) * 0.1)
         for _ in 0..<numberElemetsForDestroying {
-            if let id = newDict.keys.randomElement() {
-                if let planetarySystem = newDict.removeValue(forKey: id) {
+            if let id = newPlanetarySystemsDict.keys.randomElement() {
+                if let planetarySystem = newPlanetarySystemsDict.removeValue(forKey: id) {
                     self.deleteDelegate?.deleteData(from: self, planetarySystem: planetarySystem)
                 }
             }
         
         }
-        //TODO change using fabric or smth else
-        let galaxy = Galaxy(id: UUID(), type: self.type, age: self.age, delegate: self.delegate, contentArray: newDict)
+        let galaxy = Galaxy(id: UUID(), type: self.type, age: self.age, delegate: self.delegate, planetarySystems: newPlanetarySystemsDict)
         galaxy.delegate = self.delegate
         return galaxy
     }
@@ -110,13 +105,13 @@ extension Galaxy: Comparable, Compose {
             componentsDict[planetarySystem.id] = planetarySystem
             self.reloadDelegate?.reloadData(component: planetarySystem)
         }
-        //to inform age changes or don't use it? 
+        //to inform age, weight changes ?
         self.reloadDelegate?.reloadData(component: nil)
         
     }
     
     static func < (lhs: Galaxy, rhs: Galaxy) -> Bool {
-        return lhs.weight < lhs.weight
+        lhs.weight < lhs.weight
     }
     
     static func == (lhs: Galaxy, rhs: Galaxy) -> Bool {
@@ -125,11 +120,11 @@ extension Galaxy: Comparable, Compose {
     
     
     func getFullSystemRespresentation() -> [String: String] {
-        return ["age": String(age), "type": type.rawValue, "count of nested systems": String(componentsDict.count), "weight": String(countWeight())]
+        ["age": String(age), "type": type.rawValue, "count of nested systems": String(componentsDict.count), "weight": String(countWeight())]
     }
     
     func getBriefSystemRepresentation() -> [String: String] {
-        return ["id": id.uuidString]
+        ["id": id.uuidString]
     }
 }
 
@@ -141,10 +136,10 @@ extension Galaxy: Hashable {
 }
 
 
-extension Galaxy: DestroyPlanetarySystem {
+extension Galaxy: DestroyingPlanetarySystem {
 /*    To have posibility in future acces by id to black hole
       I should not save under planetary system id but under blackHol's */
-    func destroyPlanetarySystem(id: UUID, blackHole: BlackHole) {
+    func destroy(id: UUID, blackHole: BlackHole) {
         self.componentsDict[blackHole.id] = blackHole
         self.reloadDelegate?.reloadData(component: blackHole)
         let planetarySystem = self.componentsDict.removeValue(forKey: id)

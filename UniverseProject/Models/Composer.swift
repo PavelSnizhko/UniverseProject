@@ -27,8 +27,7 @@ extension Compose {
     func getComponents () -> [Compose] {
         return componentsDict.values.sorted { $0.age > $1.age }
     }
-        
-    
+  
 }
 
 func ==(lhs: Compose, rhs: Compose) -> Bool {

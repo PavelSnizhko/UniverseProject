@@ -51,7 +51,6 @@ extension Planet: Compose {
 
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule) {
         self.age += timeInterval
-        //TODO: check this - do I realy need this reloadData ???
         self.reloadDelegate?.reloadData(component: nil)
     }
     

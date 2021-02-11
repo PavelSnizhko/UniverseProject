@@ -28,7 +28,7 @@ class Universe: Compose {
         self.id = id
         self.delegate = delegate
         self.universeRule = universeRule
-        self.timer = Timer(timeInterval: 3, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
+        self.timer = Timer(timeInterval: 10, target: self, selector: #selector(updateTimer), userInfo: universeRule, repeats: true)
         self.reloadDelegate = reloadDataDelegate
         if let timer = timer {
             RunLoop.current.add(timer, forMode: .common)
@@ -54,9 +54,9 @@ extension Universe{
         handleTimePeriod(timeInterval: 10, universeRule: self.universeRule)
     }
     
+    
     func handleTimePeriod(timeInterval: Int, universeRule: UniverseRule)  {
         self.age += timeInterval
-//        print("\(timeInterval) СЕКУНД ВО ВСЕЛЕННОЙ")
                 
         for component in componentsDict.values {
             if let galaxy = component as? Galaxy, galaxy.age >= 180, readyForDestroy[galaxy.id] == nil {
@@ -65,11 +65,14 @@ extension Universe{
             component.handleTimePeriod(timeInterval: timeInterval, universeRule: self.universeRule)
         }
         
-        if let component = delegate?.generateGalaxy(){
+        if let newGalaxy = delegate?.generateGalaxy(){
 
-            addComponent(component: component)
-            self.reloadDelegate?.reloadData(component: component)
-            print("Got bith new galaxy")
+            addComponent(component: newGalaxy)
+            DispatchQueue.main.async {
+                self.reloadDelegate?.reloadData(component: newGalaxy)
+                print("Was given a birth to new galaxy")
+            }
+           
         }
         
         if self.age % 30 == 0 && self.readyForDestroy.count >= 2  {
@@ -86,7 +89,7 @@ extension Universe{
     func getFullSystemRespresentation() -> [String: String] {
         return ["age" : String(self.age),
                 "weight": String(countWeight()),
-                "count of nested systems": String(componentsDict.count),
+                "count of nested systems": String(componentsDict.count)
                 ]
     }
 }
@@ -120,13 +123,20 @@ private extension Universe {
             newGalaxy = secondGalaxy.interact(with: firstGalaxy)
         }
         
-        
-        self.deleteComponentsDelegate?.deleteComponents(from: self, components: (componentsDict.removeValue(forKey: firstGalaxy.id)!, componentsDict.removeValue(forKey: secondGalaxy.id)!))
-        
+        DispatchQueue.main.async {
+            self.deleteComponentsDelegate?.deleteComponents(from: self, components: (self.componentsDict.removeValue(forKey: firstGalaxy.id)!, self.componentsDict.removeValue(forKey: secondGalaxy.id)!))
+
+        }
         componentsDict[newGalaxy.id] = newGalaxy
         readyForDestroy[newGalaxy.id] = newGalaxy
-        self.reloadDelegate?.reloadData(component: newGalaxy)
+        
+        DispatchQueue.main.async {
+            self.reloadDelegate?.reloadData(component: newGalaxy)
+            print("Was given a birth to new galaxy after Collision")
+        }
         readyForDestroy[firstGalaxy.id] = nil
         readyForDestroy[secondGalaxy.id] = nil
     }
 }
+
+

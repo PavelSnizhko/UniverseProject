@@ -17,7 +17,7 @@ class ModelGenerator: PowerModelGenerator {
    
     func generatePlanetarySystem(galaxyDelegat: Galaxy) -> Compose {
         let type = Star.StarType.allCases.randomElement()!
-        return PlanetarySystem(id: UUID(), delegateModelGenerator: self, delegateDestroyPlanetarySystem: galaxyDelegat, mainStar: Star(id: UUID(), weight: Int.random(in: 0..<100), type: type, temeperature: Int.random(in: 0..<100), luminosity: Int.random(in: 0..<100), radius: Int.random(in: 0..<100)))
+        return PlanetarySystem(id: UUID(), delegateModelGenerator: self, destroyingPlanetarySystemDelegate: galaxyDelegat, mainStar: Star(id: UUID(), weight: Int.random(in: 0..<100), type: type, temeperature: Int.random(in: 0..<100), luminosity: Int.random(in: 0..<100), radius: Int.random(in: 0..<100)))
     }
     
     func generatePlanet() -> Compose {
